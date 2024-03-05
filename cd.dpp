@@ -1,0 +1,110 @@
+#include<iostream>
+#include<vector>
+#include<cmath>
+#include<utility>
+#include"linklisk.hpp"
+using namespace std;
+
+using pdd = pair<double,double>;
+using FunOp = pdd(*)(double,double);
+
+
+
+pdd SwapOp(double a,double b){
+    return {b,a};
+}
+
+class bucket
+{
+public:
+    double value;
+    int number;
+public:
+    bucket(double v = 0, int n = 0){
+        value = v;
+        number = n;
+    }
+   
+};
+
+class cd
+{
+private:
+    
+    int qnumber,qsize,lsize;
+    vector<bucket> list;
+
+
+public:
+    cd(int qn,int qs = 0,int ls = 0);
+    ~cd();
+    int  Convert(vector<double> sv){
+        //sv向cd的转化
+        int n = sv.size();
+        if(n!=qsize){
+            return 0;
+            //返回的算状态量,0为不匹配,1为成功
+        }
+        int i =0;
+        while(i<n){
+            double x = sv[i];
+            int j=0;
+
+            while(i<n && sv[i] == x){
+                i++,j++;
+                //结束循环后i指向第一个不为x的元素
+            }
+            list.push_back({x,j});
+
+        }
+        return 1;
+    }
+
+    void DisplayV(){
+        //展示为sv形式
+        for(auto i:list){
+            int j = i.number;
+            double x = i.value;
+            while(j--){
+                cout<<x<<" ";
+            }
+        }
+        cout<<endl;
+    }
+
+    void DisplayB(){
+        //展示为cd形式
+        for(auto i:list){
+            cout<<i.value<<" "<<i.number<<"--";
+        }
+        cout<<endl;
+    }
+    void Operate(FunOp func,int qn){
+        //对cd进行门操作
+        //param: func : operation on two amplitudes
+        //       qn   : gate q n
+        int gap = 1<<qn;
+        int span = 2*(gap-1);
+        
+
+    }
+
+
+};
+
+cd::cd(int qn,int qs,int ls)
+{
+    //cd的构造函数
+    qnumber = qn;
+    qsize = 1<<qn;
+    lsize = ls;
+    list = {};
+
+}
+
+cd::~cd()
+{
+}
+
+
+
