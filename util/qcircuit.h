@@ -116,7 +116,7 @@ public:
             add_level();
         }
         gates[numDepths-1][ctrl] = MatrixImp("SWAP", true, true, ctrl, targ);
-        gates[numDepths-1][targ] = MatrixImp("SWAP", true, true, ctrl, targ);
+        gates[numDepths-1][targ] = MatrixImp("SWAP", true, true, targ, ctrl);
     }
 
     bool addSwap(int level, int ctrl, int targ) {
@@ -124,7 +124,7 @@ public:
             return false;
         }
         gates[level][ctrl] = MatrixImp("SWAP", true, true, ctrl, targ);
-        gates[level][targ] = MatrixImp("SWAP", true, true, ctrl, targ);
+        gates[level][targ] = MatrixImp("SWAP", true, true, targ, ctrl);
         return true;
     }
 
@@ -328,6 +328,26 @@ QCircuit VQC2(int numQubits) {
             qc.cx(i, j);
         }
     }
+
+    for (int k = 0; k < 2; ++ k)
+        for (int i = 0; i < numQubits; ++ i)
+            qc.ry(2 * M_PI, i);
+
+    return qc;
+}
+
+
+QCircuit test() {
+    int numQubits = 4;
+    QCircuit qc = QCircuit(numQubits);
+
+    for (int k = 0; k < 2; ++ k)
+        for (int i = 0; i < numQubits; ++ i)
+            qc.ry(2 * M_PI, i);
+
+    qc.swap(0, 1);
+    qc.swap(2, 3);
+    // qc.swap(4, 5);
 
     for (int k = 0; k < 2; ++ k)
         for (int i = 0; i < numQubits; ++ i)
