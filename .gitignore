@@ -1,0 +1,8 @@
+.vscode
+obj
+preprocess
+simulator/MultiQE.cpp
+simulator/SingleQE.cpp
+simulator/QuanTrans.cpp
+simulator/transform.cpp
+simulator/qHiPSTER.cpp

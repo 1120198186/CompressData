@@ -7,11 +7,14 @@
 
 using namespace std;
 
+#define random(x) (rand()%x)
+
 class QCircuit {
 public:
     int numQubits;
     int numDepths;
     vector<vector<MatrixImp>> gates;
+    // Matrix sv = Matrix(1 << numQubits, 1);
 
     QCircuit() {};
 
@@ -22,6 +25,8 @@ public:
      * @param numDepths_ #Depths
      */
     QCircuit(int numQubits_): numQubits(numQubits_){
+        // sv.data[0][0] = 1;
+        numDepths = 0;
         add_level();
     }
 
@@ -121,8 +126,10 @@ public:
 
     bool addSwap(int level, int ctrl, int targ) {
         if (ctrl == targ or gates[level][ctrl].gate_name_ != "IDE" or gates[level][targ].gate_name_ != "IDE") {
+            // cout << "[DEBUG] add swap failed. " << endl;
             return false;
         }
+        // cout << "[DEBUG] add swap success. " << endl;
         gates[level][ctrl] = MatrixImp("SWAP", true, true, ctrl, targ);
         gates[level][targ] = MatrixImp("SWAP", true, true, targ, ctrl);
         return true;
@@ -151,6 +158,56 @@ public:
         add_level();
     }
 
+    void fill(double propt = 0.1) {
+        // clear
+        for (int j = 0; j < numDepths; ++ j) {
+            for (int i = 0; i < numQubits; ++ i) {
+                gates[j][i] = MatrixImp("IDE");
+            }
+        }
+        
+        // random swap gates
+        int numSwaps = round(propt * numDepths);
+        
+        int level, ctrl, targ;
+        bool ret;
+
+        for (int i = 0; i < numSwaps; ++ i) {
+            level = random(numDepths);
+            ctrl = random(numQubits);
+            targ = random(numQubits);
+
+            ret = addSwap(level, ctrl, targ);
+            while (! ret) {
+                level = random(numDepths);
+                ctrl = random(numQubits);
+                targ = random(numQubits);
+                ret = addSwap(level, ctrl, targ);
+            }
+        }
+
+        for (int j = 0; j < numDepths; ++ j) {
+            for (int i = 0; i < numQubits; ++ i) {
+                if (gates[j][i].gate_name_ == "IDE") {
+                    level = random(4);
+                    if (level == 0) 
+                        gates[j][i] = MatrixImp("H");
+                    else if (level == 1) 
+                        gates[j][i] = MatrixImp("Z");
+                    else if (level == 2)
+                        gates[j][i] = MatrixImp("X");
+                    else {
+                        Matrix RY;
+                        Rotation_Y(random(10), RY);
+                        gates[j][i] = MatrixImp("RY", false, false, 0, 0, RY);
+                    }
+                }
+            }
+        }
+
+        // this->print();
+    }
+
     /**
      * @brief Print the structure of the quantum circuit
      */
@@ -163,6 +220,13 @@ public:
             }
             cout << endl;
         }
+    }
+
+    /**
+     * @brief Print the information of the quantum circuit
+     */
+    void printInfo() {
+        cout << "numQubits: " << numQubits << " numDepths: " << numDepths << endl;
     }
 
 private:
@@ -186,36 +250,30 @@ private:
  * 
  * @return a quantum circuit
  */
-QCircuit random(int numQubits, int numDepths, double propt=0.1) {
+QCircuit Random(int numQubits, int numDepths, double propt=0.1) {
     QCircuit qc = QCircuit(numQubits);
     qc.setDepths(numDepths);
 
     int numSwaps = round(propt * numDepths);
-    cout << "[DEBUG] numSwaps: " << numSwaps << endl;
+    // cout << "[DEBUG] numSwaps: " << numSwaps << endl;
     int level, ctrl, targ;
     bool ret;
 
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<int> levelDist(0, numDepths - 1);
-    uniform_int_distribution<int> qubitDist(0, numQubits - 1);
-
     for (int i = 0; i < numSwaps; ++ i) {
-        level = levelDist(gen);
-        ctrl = qubitDist(gen);
-        targ = qubitDist(gen);
-
-        // cout << "[DEBUG] level, ctrl, targ: " << level << ", " << ctrl << ", " << targ << endl;
+        level = random(numDepths);
+        ctrl = random(numQubits);
+        targ = random(numQubits);
 
         ret = qc.addSwap(level, ctrl, targ);
         while (! ret) {
-            level = levelDist(gen);
-            ctrl = qubitDist(gen);
-            targ = qubitDist(gen);
-            // cout << "[DEBUG] level, ctrl, targ: " << level << ", " << ctrl << ", " << targ << endl;
+            level = random(numDepths);
+            ctrl = random(numQubits);
+            targ = random(numQubits);
             ret = qc.addSwap(level, ctrl, targ);
         }
     }
+    
+    qc.print();
 
     return qc;
 }
@@ -253,6 +311,81 @@ QCircuit Grover(int numQubits) {
             qc.h(i);
         }
     }
+    return qc;
+}
+
+
+QCircuit QFT(int numQubits) {
+    QCircuit qc = QCircuit(numQubits);
+
+    int ii = 0;
+    int jj = numQubits - 1;
+    while (ii < jj) {
+        qc.swap(ii, jj);
+        ii ++;
+        jj --;
+    }
+
+    qc.h(0);
+    qc.cx(1, 0);
+    qc.barrier();
+
+    qc.h(1);
+    qc.cx(2, 0);
+    qc.cx(2, 1);
+    qc.barrier();
+
+    int n = numQubits - 1;
+    int i = 2; // H gate
+    while (i < n) {
+        qc.h(i);
+        int t = i;
+        int tt = 0;
+
+        while (t >= 2) {
+            qc.cx(i+1, tt);
+            tt += 1;
+            t -= 1;
+        }
+        qc.cx(i+1, i-1);
+        qc.cx(i+1, i);
+        i += 1;
+        qc.barrier();
+    }
+    qc.h(n);
+
+    // qc.print();
+
+    return qc;
+}
+
+/**
+ * @brief Generate VQC
+ * 
+ * @param numQubits #Qubits
+ * 
+ * @return a quantum circuit
+ */
+QCircuit VQC(int numQubits) {
+    QCircuit qc = QCircuit(numQubits);
+
+    for (int j = 0; j < 20; ++ j) {
+        // 2 levels of RY
+        for (int k = 0; k < 2; ++ k)
+            for (int i = 0; i < numQubits; ++ i)
+                qc.ry(0.8, i);
+        // levels of CX
+        for (int i = 0; i < numQubits-1; ++ i) {
+            qc.cx(i, i+1);
+            qc.barrier();
+        }
+        // 2 levels of RY
+        for (int k = 0; k < 2; ++ k)
+            for (int i = 0; i < numQubits; ++ i)
+                qc.ry(0.8, i);
+    }
+
+    qc.printInfo();
     return qc;
 }
 
@@ -338,7 +471,7 @@ QCircuit VQC2(int numQubits) {
 
 
 QCircuit test() {
-    int numQubits = 4;
+    int numQubits = 6;
     QCircuit qc = QCircuit(numQubits);
 
     for (int k = 0; k < 2; ++ k)
@@ -347,7 +480,11 @@ QCircuit test() {
 
     qc.swap(0, 1);
     qc.swap(2, 3);
-    // qc.swap(4, 5);
+    qc.swap(4, 5);
+    
+    qc.swap(0, 1);
+    qc.swap(2, 3);
+    qc.swap(4, 5);
 
     for (int k = 0; k < 2; ++ k)
         for (int i = 0; i < numQubits; ++ i)
