@@ -1,9 +1,13 @@
 # Makefile for this project
 
+# g++ test.cpp -o test.exe -fopenmp -l msmpi -L "D:\abuqiqi\AppData\Microsoft SDKs\MPI\Lib\x64" -I "D:\abuqiqi\AppData\Microsoft SDKs\MPI\Include"
+
+# "D:\abuqiqi\AppData\Microsoft MPI\Bin\mpiexec.exe" -n 3 test.exe
+
 # ---------------------	macros --------------------------
 
 # compiler and flags
-CC := g++
+CC := mpic++
 CCFLAGS := -std=c++11 -Wall -Werror
 
 # directories
@@ -12,7 +16,7 @@ INC_DIR := util
 SRC_DIR := simulator
 OUT_DIR := output
 
-COMPILE := $(CC) $(CCFLAGS) -I./$(INC_DIR)/ -pthread
+COMPILE := $(CC) $(CCFLAGS) -pthread -I./$(INC_DIR)/
 
 # --------------------- utils ----------------------
 
@@ -39,8 +43,9 @@ all: $(TARGETS)
 
 # mkdir obj obj/util output
 $(OBJ_DIR):
-	mkdir $(OBJ_DIR)
-	mkdir $(OBJ_DIR)\util
+	@-mkdir -p $(OBJ_DIR)
+	@-mkdir -p $(dir $(UTIL_OBJS))
+	@-mkdir -p $(OUT_DIR)
 
 # utility functions: util/*.cpp -> obj/util/*.o
 $(OBJ_DIR)/%.o: %.cpp
@@ -55,4 +60,4 @@ $(OBJ_DIR)/%: $(OBJ_DIR) $(SIMULATOR_CPPS) $(UTIL_OBJS)
 
 # clean
 clean:
-	del /s /q $(OBJ_DIR)
+	rm -rf $(OBJ_DIR)

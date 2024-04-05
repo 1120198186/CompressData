@@ -189,23 +189,23 @@ public:
         for (int j = 0; j < numDepths; ++ j) {
             for (int i = 0; i < numQubits; ++ i) {
                 if (gates[j][i].gate_name_ == "IDE") {
-                    level = random(4);
+                    level = random(3);
                     if (level == 0) 
                         gates[j][i] = MatrixImp("H");
                     else if (level == 1) 
                         gates[j][i] = MatrixImp("Z");
                     else if (level == 2)
                         gates[j][i] = MatrixImp("X");
-                    else {
-                        Matrix RY;
-                        Rotation_Y(random(10), RY);
-                        gates[j][i] = MatrixImp("RY", false, false, 0, 0, RY);
-                    }
+                    // else {
+                    //     Matrix RY;
+                    //     Rotation_Y(random(10), RY);
+                    //     gates[j][i] = MatrixImp("RY", false, false, 0, 0, RY);
+                    // }
                 }
             }
         }
 
-        // this->print();
+        this->print();
     }
 
     /**
