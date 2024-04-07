@@ -7,16 +7,19 @@
 # ---------------------	macros --------------------------
 
 # compiler and flags
-CC := mpic++
+CC := g++
 CCFLAGS := -std=c++11 -Wall -Werror
 
 # directories
 OBJ_DIR := obj
 INC_DIR := util
-SRC_DIR := simulator
+SIM_DIR := simulator
+SRC_DIR := main
 OUT_DIR := output
 
-COMPILE := $(CC) $(CCFLAGS) -pthread -I./$(INC_DIR)/
+INCFLAGS := -I./$(INC_DIR)/ -I./$(SIM_DIR)/
+
+COMPILE := $(CC) $(CCFLAGS) $(INCFLAGS) -pthread 
 
 # --------------------- utils ----------------------
 
@@ -27,14 +30,21 @@ UTIL_OBJS := $(addprefix $(OBJ_DIR)/, $(patsubst %.cpp,%.o,$(UTIL_CPPS)))
 
 # ------------------- simulators -------------------
 
-SIMULATOR_CPPS := $(SRC_DIR)/QuanPart.cpp
-SIMULATOR_CPPS := $(wildcard $(SIMULATOR_CPPS))
+SIM_CPPS := $(SIM_DIR)/*.cpp
+SIM_CPPS := $(wildcard $(SIM_CPPS))
 
-SIMULATOR_OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%,$(SIMULATOR_CPPS))
+SIM_OBJS := $(addprefix $(OBJ_DIR)/, $(patsubst %.cpp,%.o,$(SIM_CPPS)))
+
+# --------------------- main -----------------------
+
+MAIN_CPPS := $(SRC_DIR)/main.cpp
+MAIN_CPPS := $(wildcard $(MAIN_CPPS))
+
+MAIN_OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%,$(MAIN_CPPS))
 
 # -------------------- targets ---------------------
 
-TARGETS := $(SIMULATOR_OBJS)
+TARGETS := $(MAIN_OBJS)
 
 .PHONY: all clean
 .PRECIOUS: $(OBJ_DIR)/%.o
@@ -43,21 +53,30 @@ all: $(TARGETS)
 
 # mkdir obj obj/util output
 $(OBJ_DIR):
-	@-mkdir -p $(OBJ_DIR)
-	@-mkdir -p $(dir $(UTIL_OBJS))
-	@-mkdir -p $(OUT_DIR)
+	mkdir $(OBJ_DIR)
+	mkdir $(OBJ_DIR)\util
+	mkdir $(OBJ_DIR)\simulator
+	mkdir $(OUT_DIR)
+# @-mkdir -p $(OBJ_DIR)
+# @-mkdir -p $(dir $(UTIL_OBJS))
+# @-mkdir -p $(OUT_DIR)
 
 # utility functions: util/*.cpp -> obj/util/*.o
+# simulator functions: simulator/*.cpp -> obj/simulator/*.o
 $(OBJ_DIR)/%.o: %.cpp
 	@echo "[INFO] Compiling" $< ...
 	@$(COMPILE) -c $< -o $@
 
-# executable files: simulator/*.cpp -> obj/*
-$(OBJ_DIR)/%: $(OBJ_DIR) $(SIMULATOR_CPPS) $(UTIL_OBJS)
+# executable files: main/*.cpp -> obj/*
+$(OBJ_DIR)/%: $(OBJ_DIR) $(MAIN_CPPS) $(UTIL_OBJS) $(SIM_OBJS)
 	@echo "[INFO] Linking" $@ ...
-	@$(COMPILE) $(patsubst $(OBJ_DIR)/%,$(SRC_DIR)/%.cpp,$@) $(UTIL_OBJS) -o $@
+	@$(COMPILE) $(patsubst $(OBJ_DIR)/%,$(SRC_DIR)/%.cpp,$@) $(UTIL_OBJS) $(SIM_OBJS) -o $@
 	@echo "[INFO]" $@ "has been built. "
 
 # clean
 clean:
-	rm -rf $(OBJ_DIR)
+# rm -rf $(OBJ_DIR)
+	del /s /q $(OBJ_DIR)
+
+cleanssd:
+	del /s /q $(OUT_DIR)
