@@ -69,7 +69,7 @@ void ReadMergeBlock(Matrix &localSv, long long mergeNo, long long H, string dir)
         file.close();
 
         // remove the file
-        // remove(filenameStream.str().c_str());
+        remove(filenameStream.str().c_str());
     }
     return;
 }
