@@ -3,11 +3,9 @@
 
 目前主函数在`main/main.cpp`里，生成了一个随机量子线路`qc`，然后调用不同的模拟方法去模拟这个线路​​。模拟方法包括：
 
-1. 最基础的indexing算法，可以用来检查实验结果（徐）
+1. 最基础的indexing算法，可以用来检查实验结果（**已完成**）
 
    `simulator/SVSim.[h/cpp]`
-
-   徐：目前`SVSim`和`HybridSVSim`是写了的，但二者结果在符号上不匹配，所以还要检查一下，我觉得是`HybridSVSim`的`Merge`有问题。
 
 2. 基于Repeat counter的压缩模拟（张）
 
@@ -17,19 +15,19 @@
 
    `simulator/DicCounter.[h/cpp]`
 
-4. 基于分块的无压缩模拟（徐）
+4. 基于分块的无压缩模拟（徐）（**正在做**）
 
    `simulator/BlockSVSim.[h/cpp]`
 
-5. 基于QuanPath分块的无压缩模拟（徐）
+5. 基于QuanPath分块的无压缩模拟（**已完成**）
 
    `simulator/HybridSVSim.[h/cpp]`
 
    - [x] 块的内外存交换
    - [x] 逐个载入块到内存，执行单块内的indexing计算（在`LocalComputing`中已经实现）
-   - [ ] 最后的Merge操作
+   - [x] 最后的Merge操作
 
-6. 对于分块BDD压缩+indexing来说，需要实现（可以写到`util/compress.h`文件里）（暂时放弃）
+6. 对于分块BDD压缩+indexing来说，需要实现（可以写到`util/compress.h`文件里）（**暂时放弃**）
    - [ ] 对`localSv`初始态的压缩
    - [ ] 计算压缩率
    - [ ] 需要实现块的定位（找到参与indexing的块）

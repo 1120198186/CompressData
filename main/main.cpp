@@ -40,7 +40,9 @@ int main(int argc, char** argv) {
     // Method 3: Hybrid SVSim
     HybridSVSim(qc, memQubits);
 
-    // Method 4: Repeat Counter
+    // TODO: Method 4: Repeat Counter
+
+    // TODO: Method 5: Dictionary + Counter
 
     return 0;
 }

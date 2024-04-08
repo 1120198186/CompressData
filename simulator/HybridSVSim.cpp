@@ -40,8 +40,6 @@ void HybridSVSim(QCircuit &qc, int memQubits) {
     }
 
     // myThread.join();
-    cout << "[DEBUG] opMat =====" << endl;
-    opMat.print();
 
     //
     // Merge
@@ -88,20 +86,19 @@ void BuildHighOrderOpMat(Matrix &opMat, QCircuit &qc, long long H, int lowQubits
                 // if (gates[i][j].target_qubit_ >= lowQubit) {
                 if (qc.gates[i][j].is_target_gate_) {
                     if (qc.gates[i][j].target_qubit_ != j) {
-                        // cout << "[INFO] Generate SWAP level [" << i << "] " << gates[i][j].control_qubit_ << " " << gates[i][j].target_qubit_ << endl;
                         // only process the higher swap qubit
                         if (qc.gates[i][j].control_qubit_ > qc.gates[i][j].target_qubit_) {
                             // generate a 2^h x 2^h SWAP operation-matrix
                             GenSwapGate(qc.gates[i][j].control_qubit_-lowQubits, qc.gates[i][j].target_qubit_-lowQubits, highQubits, matB);
                             // save the operation-matrix of 2-input gates
-                            Matrix_Multiplication(opMat, matB, matRes);
+                            Matrix_Multiplication(matB, opMat, matRes);
                             opMat.copy(matRes);
                         }
                     } else {
                         // generate a 2^h x 2^h operation-matrix
                         GenControlGate(qc.gates[i][j].gate_, qc.gates[i][j].control_qubit_-lowQubits, j-lowQubits, highQubits, matB);
                         // save the operation-matrix of 2-input gates
-                        Matrix_Multiplication(opMat, matB, matRes);
+                        Matrix_Multiplication(matB, opMat, matRes);
                         opMat.copy(matRes);
                     }
                 }
@@ -110,7 +107,7 @@ void BuildHighOrderOpMat(Matrix &opMat, QCircuit &qc, long long H, int lowQubits
         // end of a level of gates
         // save the tensor product result of single qubit gates
         if (j != qc.numQubits-1) { // if j == nQubits-1, it is a MERGE level, no stage matrix
-            Matrix_Multiplication(opMat, matA, matRes);
+            Matrix_Multiplication(matA, opMat, matRes);
             opMat.copy(matRes);
         }
     }
@@ -133,14 +130,12 @@ void MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long long 
         filenameStream.str(""); // clear the stream
         filenameStream << dir << "out" << filename << ".txt";
         file.open(filenameStream.str());
-        cout << "[DEBUG] filename = " << filenameStream.str() << endl;
 
         // write the file
         for (long long i = 0; i < fileSize; ++ i) {
             ans = 0.0;
             for (long long j = 0; j < H; ++ j) {
                 ans += opMat.data[blkNo][j] * localV.data[j * fileSize + i][0];
-                cout << "opMat[" << blkNo << "][" << j << "] * localV[" << j * fileSize + i << "][0] = " << opMat.data[blkNo][j] << " * " << localV.data[j * fileSize + i][0] << endl;
             }
             file << ans << endl; // write total fileSize amplitudes to file
         }
