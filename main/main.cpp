@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
     srand((int)time(0));
 
     int numQubits = atoi(argv[1]); // the number of qubits of the circuit
-    int memQubits = atoi(argv[2]); // the maximum number of qubits in the memory
+    int memQubits = atoi(argv[2]); // the maximum number of qubits in the memory <= numQubits
     int numDepths = atoi(argv[3]); // the number of depths of the circuit
 
     // long long N = (1 << numQubits);
@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
     // TODO: Method 2: Block-based SVSim
 
     // Method 3: Hybrid SVSim
-    HybridSVSim(qc, memQubits);
+    // HybridSVSim(qc, memQubits);
 
     // TODO: Method 4: Repeat Counter
 
