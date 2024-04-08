@@ -1,3 +1,4 @@
+#include "indexing.h"
 #include "qcircuit.h"
 #include "block.h"
 

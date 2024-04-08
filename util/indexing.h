@@ -5,6 +5,16 @@
 #include "matrix_wrap.h"
 
 /**
+ * @brief [Util] Local indexing for 2x2 gates
+ * 
+ * @param g 2x2 gate matrix
+ * @param a amplitude 0
+ * @param b amplitude 1
+ */
+void multiplyWithGate2x2(Matrix &g, double &a, double &b);
+
+
+/**
  * @brief Indexing for 2x2 gates, including CU gates
  * 
  * @param localV    local state-vector
@@ -16,6 +26,18 @@
  */
 void IndexingWithGate2x2(Matrix &localV, long long localVLen,
         MatrixImp &gate, int qid, int lowQubit, int myRank);
+
+
+/**
+ * @brief Local indexing for 4x4 gates
+ * 
+ * @param g 4x4 gate matrix
+ * @param a amplitude 0
+ * @param b amplitude 1
+ * @param c amplitude 2
+ * @param d amplitude 3
+ */
+void multiplyWithGate4x4(Matrix &g, double &a, double &b, double &c, double &d);
 
 
 /**

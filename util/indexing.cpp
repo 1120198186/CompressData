@@ -11,7 +11,7 @@
  * @param a amplitude 0
  * @param b amplitude 1
  */
-void mutiplyWithGate2x2(Matrix &g, double &a, double &b) {
+void multiplyWithGate2x2(Matrix &g, double &a, double &b) {
     double temp0 = a*g.data[0][0] + b*g.data[0][1];
     double temp1 = a*g.data[1][0] + b*g.data[1][1];
     a = temp0;
@@ -69,7 +69,7 @@ void IndexingWithGate2x2(Matrix &localV, long long localVLen,
         }
 
         // indexing
-        mutiplyWithGate2x2(gate.gate_, localV.data[j][0], localV.data[j + stride][0]);
+        multiplyWithGate2x2(gate.gate_, localV.data[j][0], localV.data[j + stride][0]);
     }
 }
 
@@ -110,14 +110,14 @@ void IndexingWithGate4x4(Matrix &localV, long long localVLen,
     int ctrl = gate.control_qubit_;
     int targ = gate.target_qubit_;
 
-    if (ctrl >= lowQubit || targ >= lowQubit) {
-        cout << "[ERROR] The SWAP gate exceeds local qubits. " << endl;
-        exit(1);
-    }
-
     if (ctrl <= targ) {
         // cout << "[INFO] Skip low SWAP" << endl;
         return;
+    }
+
+    if (ctrl >= lowQubit || targ >= lowQubit) {
+        cout << "[ERROR] The SWAP gate exceeds local qubits. " << endl;
+        exit(1);
     }
 
     bool isAccessed[localVLen];

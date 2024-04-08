@@ -2,8 +2,10 @@
 
 #include "qcircuit.h"
 #include "block.h"
+#include "timer.h"
 
 #include "SVSim.h"
+#include "BlockSVSim.h"
 #include "HybridSVSim.h"
 
 int main(int argc, char** argv) {
@@ -29,16 +31,28 @@ int main(int argc, char** argv) {
     qc.setDepths(numDepths);
     qc.fill(0);
 
+    Timer timer;
+
     //
     // Call different simulators
     //
     // Method 1: Local SVSim
+    timer.Start();
     SVSim(qc);
+    timer.End();
+    timer.ElapsedTime();
 
     // TODO: Method 2: Block-based SVSim
+    timer.Start();
+    BlockSVSim(qc, memQubits);
+    timer.End();
+    timer.ElapsedTime();
 
     // Method 3: Hybrid SVSim
-    // HybridSVSim(qc, memQubits);
+    timer.Start();
+    HybridSVSim(qc, memQubits);
+    timer.End();
+    timer.ElapsedTime();
 
     // TODO: Method 4: Repeat Counter
 

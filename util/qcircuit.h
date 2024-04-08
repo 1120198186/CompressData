@@ -217,7 +217,7 @@ public:
     void print() {
         cout << "numQubits: " << numQubits << " numDepths: " << numDepths << endl;
         for (int i = 0; i < numQubits; ++ i) {
-            if (i > 10) {
+            if (i > 5) {
                 cout << "..." << endl;
                 break;
             }

@@ -26,7 +26,7 @@ void HybridSVSim(QCircuit &qc, int memQubits) {
     // TODO: thread myThread(std::bind(BuildHighOrderOpMat, opMat, qc, H, lowQubits));
 
     //
-    // Local svsim for each block
+    // Local SVSim for each block
     //
     Matrix localSv = Matrix(L, 1);
     for (long long blkNo = 0; blkNo < H; ++ blkNo) {

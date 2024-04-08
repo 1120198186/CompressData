@@ -15,9 +15,14 @@
 
    `simulator/DicCounter.[h/cpp]`
 
-4. 基于分块的无压缩模拟（徐）（**正在做**）
+4. 基于分块的无压缩模拟（徐）（**已完成**）
 
    `simulator/BlockSVSim.[h/cpp]`
+
+   - [x] single qubit gates
+   - [x] 2-qubit controlled gates
+   - [x] 2-qubit non-controlled gates in either high-order or low-order
+   - [ ] 2-qubit non-controlled gates that causes inseprable levels
 
 5. 基于QuanPath分块的无压缩模拟（**已完成**）
 
@@ -26,6 +31,7 @@
    - [x] 块的内外存交换
    - [x] 逐个载入块到内存，执行单块内的indexing计算（在`LocalComputing`中已经实现）
    - [x] 最后的Merge操作
+   - [ ] 用线程计算高位操作矩阵
 
 6. 对于分块BDD压缩+indexing来说，需要实现（可以写到`util/compress.h`文件里）（**暂时放弃**）
    - [ ] 对`localSv`初始态的压缩
