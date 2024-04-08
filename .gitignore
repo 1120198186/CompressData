@@ -2,8 +2,8 @@
 obj
 output
 preprocess
-simulator/MultiQE.cpp
-simulator/SingleQE.cpp
-simulator/QuanTrans.cpp
-simulator/transform.cpp
-simulator/qHiPSTER.cpp
+mpi/MultiQE.cpp
+mpi/SingleQE.cpp
+mpi/QuanTrans.cpp
+mpi/transform.cpp
+mpi/qHiPSTER.cpp
