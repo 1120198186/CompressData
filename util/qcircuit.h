@@ -217,8 +217,16 @@ public:
     void print() {
         cout << "numQubits: " << numQubits << " numDepths: " << numDepths << endl;
         for (int i = 0; i < numQubits; ++ i) {
+            if (i > 10) {
+                cout << "..." << endl;
+                break;
+            }
             cout << "q[" << i << "]\t";
             for (int j = 0; j < numDepths; ++ j) {
+                if (j > 10) {
+                    cout << "...";
+                    break;
+                }
                 cout << gates[j][i].gate_name_ << "\t"; 
             }
             cout << endl;
