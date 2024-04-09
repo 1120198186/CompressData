@@ -255,6 +255,26 @@ private:
 };
 
 /**
+ * @brief Random a circuit with regular state vector using H, Z, X, CX gates
+ * 
+ * @param numQubits 
+ * @param numDepths 
+ * @return QCircuit 
+ */
+QCircuit RandomRegular(int numQubits, int numDepths);
+
+
+/**
+ * @brief Random a circuit with random state vector using H, Z, X, RY, CX gates
+ * 
+ * @param numQubits 
+ * @param numDepths 
+ * @return QCircuit 
+ */
+QCircuit RandomRandom(int numQubits, int numDepths);
+
+
+/**
  * @brief Generate a random dense circuit
  * 
  * @param numQubits #Qubits

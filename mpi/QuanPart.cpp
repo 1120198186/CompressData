@@ -308,7 +308,7 @@ int main(int argc, char** argv) {
     }
     
     stringstream filenameStream;
-    filenameStream << "./output/" << myRank << ".txt";
+    filenameStream << "./output/" << myRank;
     std::string outfile = filenameStream.str();
 
     freopen(outfile.c_str(), "a", stdout);

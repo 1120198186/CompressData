@@ -128,7 +128,7 @@ void MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long long 
 
         // open the file
         filenameStream.str(""); // clear the stream
-        filenameStream << dir << "out" << filename << ".txt";
+        filenameStream << dir << "out" << filename;
         file.open(filenameStream.str());
 
         // write the file
