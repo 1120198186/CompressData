@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
     timer.End();
     timer.ElapsedTime();
 
-    // TODO: Method 2: Block-based SVSim
+    // Method 2: Block-based SVSim
     timer.Start();
     BlockSVSim(qc, memQubits);
     timer.End();
