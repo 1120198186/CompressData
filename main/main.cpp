@@ -1,7 +1,4 @@
-#include <bits/stdc++.h>
-
 #include "qcircuit.h"
-#include "block.h"
 #include "timer.h"
 
 #include "SVSim.h"
@@ -20,15 +17,12 @@ int main(int argc, char** argv) {
     int memQubits = atoi(argv[2]); // the maximum number of qubits in the memory <= numQubits
     int numDepths = atoi(argv[3]); // the number of depths of the circuit
 
-    // long long N = (1 << numQubits);
-    // long long M = (1 << memQubits);
-
     // 
     // Generate a quantum circuit
     // 
     // Random /////
-    // QCircuit qc = RandomRegular(numQubits, numDepths);
-    QCircuit qc = RandomRandom(numQubits, numDepths);
+    QCircuit qc = RandomRegular(numQubits, numDepths);
+    // QCircuit qc = RandomRandom(numQubits, numDepths);
 
     Timer timer;
 

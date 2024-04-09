@@ -2,6 +2,7 @@
 obj
 output
 preprocess
+__pycache__
 mpi/MultiQE.cpp
 mpi/SingleQE.cpp
 mpi/QuanTrans.cpp
