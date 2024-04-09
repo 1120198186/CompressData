@@ -10,7 +10,7 @@ void InitStateVectorSSD(long long N, long long numFiles, string dir) {
         ofstream file(filenameStream.str()); // 打开文件
 
         for (long long j = 0; j < fileSize; ++ j) {
-            if (i == 0 and j == 0) {
+            if (i == 0 && j == 0) {
                 file << 1 << endl;
             } else {
                 file << 0 << endl;

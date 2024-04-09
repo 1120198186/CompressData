@@ -258,7 +258,7 @@ private:
  * @brief Random a circuit with regular state vector using H, Z, X, CX gates
  * 
  * @param numQubits 
- * @param numDepths 
+ * @param numDepths
  * @return QCircuit 
  */
 QCircuit RandomRegular(int numQubits, int numDepths);
@@ -283,6 +283,7 @@ QCircuit RandomRandom(int numQubits, int numDepths);
  */
 QCircuit Random(int numQubits, int numDepths, double propt=0.1);
 
+
 /**
  * @brief Generate a Grover's circuit
  * 
@@ -292,7 +293,9 @@ QCircuit Random(int numQubits, int numDepths, double propt=0.1);
  */
 QCircuit Grover(int numQubits);
 
+
 QCircuit QFT(int numQubits);
+
 
 /**
  * @brief Generate VQC
@@ -303,6 +306,7 @@ QCircuit QFT(int numQubits);
  */
 QCircuit VQC(int numQubits);
 
+
 /**
  * @brief Generate VQC1 (a small number of inseparable levels)
  * 
@@ -311,6 +315,7 @@ QCircuit VQC(int numQubits);
  * @return a quantum circuit
  */
 QCircuit VQC1(int numQubits);
+
 
 /**
  * @brief Generate VQC2 (a larger number of inseparable levels)
@@ -321,6 +326,7 @@ QCircuit VQC1(int numQubits);
  */
 QCircuit VQC2(int numQubits);
 
-QCircuit test();
+
+QCircuit test(int numQubits, int numDepths);
 
 #endif // QCIRCUIT_H

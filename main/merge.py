@@ -30,8 +30,8 @@ def sort_by_number(file_name):
 
 file_names = sorted(file_names, key=sort_by_number)
 
-for file_name in file_names:
-    print(file_name)
+# for file_name in file_names:
+#     print(file_name)
 
 merged_file = dir + 'out.txt'
 

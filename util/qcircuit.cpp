@@ -310,30 +310,42 @@ QCircuit VQC2(int numQubits) {
 }
 
 
-QCircuit test() {
-    int numQubits = 6;
+QCircuit test(int numQubits, int numDepths) {
+    numQubits = 2;
     QCircuit qc = QCircuit(numQubits);
 
-    // for (int k = 0; k < 2; ++ k)
-    //     for (int i = 0; i < numQubits; ++ i)
-    //         qc.ry(2 * M_PI, i);
+    qc.h(1);
+    qc.cx(1,0);
 
-    // qc.cx(0, 1);
-    // qc.cx(2, 3);
-    // qc.cx(4, 5);
-    
-    // qc.cx(0, 1);
-    // qc.cx(2, 3);
-    // qc.cx(4, 5);
+    // for (int i = 0; i < 2; ++ i) {
+    //     qc.h(0);
+    //     qc.x(1);
+    //     qc.h(2);
+    //     qc.z(3);
+    //     qc.z(4);
+    //     qc.h(5);
 
-    // for (int k = 0; k < 2; ++ k)
-    //     for (int i = 0; i < numQubits; ++ i)
-    //         qc.ry(2 * M_PI, i);
-    qc.h(0);
-    qc.h(2);
-    qc.h(4);
-    qc.swap(0,1);
-    qc.cx(0,1);
+    //     qc.h(0);
+    //     qc.x(1);
+    //     qc.h(2);
+    //     qc.z(3);
+    //     qc.z(4);
+    //     qc.h(5);
+
+    //     qc.cx(5,4);
+    //     qc.cx(3,2);
+    //     qc.cx(1,0);
+        
+    //     qc.cx(4,3);
+    //     qc.cx(2,1);
+
+    //     qc.z(0);
+    //     qc.x(1);
+    //     qc.z(2);
+    //     qc.h(3);
+    //     qc.h(4);
+    //     qc.h(5);
+    // }
     
     qc.print();
 
