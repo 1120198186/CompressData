@@ -6,11 +6,11 @@ void InitStateVectorSSD(long long N, long long numFiles, string dir) {
 
     for (long long i = 0; i < numFiles; ++ i) {
         filenameStream.str(""); // clear the stream
-        filenameStream << dir << i << ".txt";
+        filenameStream << dir << i;
         ofstream file(filenameStream.str()); // 打开文件
 
         for (long long j = 0; j < fileSize; ++ j) {
-            if (i == 0 and j == 0) {
+            if (i == 0 && j == 0) {
                 file << 1 << endl;
             } else {
                 file << 0 << endl;
@@ -33,7 +33,7 @@ void ReadBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir) 
 
         // open the file
         filenameStream.str(""); // clear the stream
-        filenameStream << dir << filename << ".txt";
+        filenameStream << dir << filename; // << ".txt";
         file.open(filenameStream.str());
 
         // read the file
@@ -59,7 +59,7 @@ void ReadMergeBlock(Matrix &localSv, long long mergeNo, long long H, string dir)
 
         // open the file
         filenameStream.str(""); // clear the stream
-        filenameStream << dir << filename << ".txt";
+        filenameStream << dir << filename; // << ".txt";
         file.open(filenameStream.str());
 
         // read the file
@@ -87,7 +87,7 @@ void WriteBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir)
 
         // open the file
         filenameStream.str(""); // clear the stream
-        filenameStream << dir << filename << ".txt";
+        filenameStream << dir << filename; // << ".txt";
         file.open(filenameStream.str());
 
         // write the file

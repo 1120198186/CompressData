@@ -1,5 +1,5 @@
 # CompressData
-## 完成进度（240408）
+## 完成进度（240409）
 
 目前主函数在`main/main.cpp`里，生成了一个随机量子线路`qc`，然后调用不同的模拟方法去模拟这个线路​​。模拟方法包括：
 
@@ -15,9 +15,14 @@
 
    `simulator/DicCounter.[h/cpp]`
 
-4. 基于分块的无压缩模拟（徐）（**正在做**）
+4. 基于分块的无压缩模拟（徐）（**已完成**）
 
    `simulator/BlockSVSim.[h/cpp]`
+
+   - [x] single qubit gates
+   - [x] 2-qubit controlled gates
+   - [x] 2-qubit non-controlled gates in either high-order or low-order
+   - [ ] 2-qubit non-controlled gates that causes inseprable levels
 
 5. 基于QuanPath分块的无压缩模拟（**已完成**）
 
@@ -26,11 +31,12 @@
    - [x] 块的内外存交换
    - [x] 逐个载入块到内存，执行单块内的indexing计算（在`LocalComputing`中已经实现）
    - [x] 最后的Merge操作
+   - [ ] 用线程计算高位操作矩阵
 
 6. 对于分块BDD压缩+indexing来说，需要实现（可以写到`util/compress.h`文件里）（**暂时放弃**）
    - [ ] 对`localSv`初始态的压缩
    - [ ] 计算压缩率
-   - [ ] 需要实现块的定位（找到参与indexing的块）
+   - [x] 需要实现块的定位（找到参与indexing的块）
    - [ ] 参与运算的块的解压缩
    - [ ] 多块参与的indexing运算（在`LocalComputing`中实现了一个单块indexing，可以参考）
    - [ ] 重新压缩（和初始态压缩用的是同一个函数）
@@ -45,7 +51,9 @@
 
 ```shell
 make
+make cleanssd
 .\obj\main.exe <numQubits> <memQubits> <numDepths>
+python main/merge.py
 ```
 
 其中，`numQubits`用于指定随机生成的线路的量子比特个数；`memQubits`说明内存最多能存下的量子比特数量，存不下的需要分块；`numDepths`说明线路深度（层数）。

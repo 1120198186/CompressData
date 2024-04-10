@@ -4,7 +4,7 @@ void HybridSVSim(QCircuit &qc, int memQubits) {
     int numQubits = qc.numQubits;
     long long N = (1 << numQubits);
 
-    int highQubits = numQubits - memQubits; // TODO: merge to the file
+    int highQubits = numQubits - memQubits;
     int lowQubits  = numQubits - highQubits;
 
     long long H = (1 << highQubits); // the number of blocks
@@ -23,10 +23,13 @@ void HybridSVSim(QCircuit &qc, int memQubits) {
     Matrix opMat;
     Matrix_Init_IDE(H, opMat);
     BuildHighOrderOpMat(opMat, qc, H, lowQubits);
+
+    // cout << endl << endl << "[DEBUG] opMat: " << endl;
+    // opMat.print();
     // TODO: thread myThread(std::bind(BuildHighOrderOpMat, opMat, qc, H, lowQubits));
 
     //
-    // Local svsim for each block
+    // Local SVSim for each block
     //
     Matrix localSv = Matrix(L, 1);
     for (long long blkNo = 0; blkNo < H; ++ blkNo) {
@@ -59,11 +62,12 @@ void BuildHighOrderOpMat(Matrix &opMat, QCircuit &qc, long long H, int lowQubits
     int highQubits = qc.numQubits - lowQubits;
     // calculate the operation-matrix of each level
     for (i = 0; i < qc.numDepths; ++ i) {
+        // cout << endl << "[DEBUG] Level: " << i << endl;
         // process all gates at the current level
         for (j = qc.numQubits-1; j >= lowQubits; -- j) {
             // matA := store the tensor product of single qubit gates
             // matRes := store the operation-matrix of 2-qubit gates
-            if (! qc.gates[i][j].is_control_gate_) {
+            if (! qc.gates[i][j].is_control_gate_ && ! qc.gates[i][j].is_target_gate_) {
                 // case 1: single qubit gates
                 if (j == qc.numQubits - 1) {
                     matA.copy(qc.gates[i][j].gate_); // init
@@ -85,7 +89,8 @@ void BuildHighOrderOpMat(Matrix &opMat, QCircuit &qc, long long H, int lowQubits
                 // if the target qubit is in high-order
                 // if (gates[i][j].target_qubit_ >= lowQubit) {
                 if (qc.gates[i][j].is_target_gate_) {
-                    if (qc.gates[i][j].target_qubit_ != j) {
+                    // if (qc.gates[i][j].target_qubit_ != j) {
+                    if (qc.gates[i][j].is_control_gate_) {
                         // only process the higher swap qubit
                         if (qc.gates[i][j].control_qubit_ > qc.gates[i][j].target_qubit_) {
                             // generate a 2^h x 2^h SWAP operation-matrix
@@ -97,6 +102,9 @@ void BuildHighOrderOpMat(Matrix &opMat, QCircuit &qc, long long H, int lowQubits
                     } else {
                         // generate a 2^h x 2^h operation-matrix
                         GenControlGate(qc.gates[i][j].gate_, qc.gates[i][j].control_qubit_-lowQubits, j-lowQubits, highQubits, matB);
+                        // cout << "[DEBUG] matB (CX): " << endl;
+                        // matB.print();
+                        
                         // save the operation-matrix of 2-input gates
                         Matrix_Multiplication(matB, opMat, matRes);
                         opMat.copy(matRes);
@@ -106,10 +114,10 @@ void BuildHighOrderOpMat(Matrix &opMat, QCircuit &qc, long long H, int lowQubits
         }
         // end of a level of gates
         // save the tensor product result of single qubit gates
-        if (j != qc.numQubits-1) { // if j == nQubits-1, it is a MERGE level, no stage matrix
-            Matrix_Multiplication(matA, opMat, matRes);
-            opMat.copy(matRes);
-        }
+        // cout << "[DEBUG] matA: " << endl;
+        // matA.print();
+        Matrix_Multiplication(matA, opMat, matRes);
+        opMat.copy(matRes);
     }
 }
 
@@ -128,7 +136,7 @@ void MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long long 
 
         // open the file
         filenameStream.str(""); // clear the stream
-        filenameStream << dir << "out" << filename << ".txt";
+        filenameStream << dir << "out" << filename;
         file.open(filenameStream.str());
 
         // write the file

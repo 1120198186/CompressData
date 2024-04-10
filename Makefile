@@ -57,6 +57,9 @@ $(OBJ_DIR):
 	mkdir $(OBJ_DIR)\util
 	mkdir $(OBJ_DIR)\simulator
 	mkdir $(OUT_DIR)
+	mkdir $(OUT_DIR)\block
+	mkdir $(OUT_DIR)\hybrid
+	mkdir $(OUT_DIR)\svsim
 # @-mkdir -p $(OBJ_DIR)
 # @-mkdir -p $(dir $(UTIL_OBJS))
 # @-mkdir -p $(OUT_DIR)

@@ -1,5 +1,119 @@
 #include "qcircuit.h"
 
+QCircuit RandomRegular(int numQubits, int numDepths) {
+    QCircuit qc = QCircuit(numQubits);
+    int gTyp;
+
+    while (true) {
+        // add two levels of CX gates
+        if (qc.numDepths % 10 == 2) {
+            for (int j = numQubits - 1; j > 0; j -= 2) {
+                qc.cx(j, j-1);
+            }
+            for (int j = numQubits - 2; j > 0; j -= 2) {
+                qc.cx(j, j-1);
+            }
+        }
+        // add one level of single-qubit gates
+        else {
+            // random single-qubit gates
+            for (int j = 0; j < numQubits; ++ j) {
+                gTyp = random(3);
+                if (gTyp == 0) {
+                    qc.h(j);
+                }
+                else if (gTyp == 1) {
+                    qc.z(j);
+                }
+                else {
+                    qc.x(j);
+                }
+            }
+        }
+
+        if (qc.numDepths >= numDepths) {
+            break;
+        }
+    }
+
+    qc.print();
+    return qc;
+}
+
+
+QCircuit RandomMedium(int numQubits, int numDepths) {
+    QCircuit qc = QCircuit(numQubits);
+    int gTyp;
+
+    while (true) {
+        // add two levels of CX gates
+        if (qc.numDepths % 10 == 2) {
+            for (int j = numQubits - 1; j > 0; j -= 2) {
+                qc.cx(j, j-1);
+            }
+            for (int j = numQubits - 2; j > 0; j -= 2) {
+                qc.cx(j, j-1);
+            }
+        }
+        // add one level of single-qubit gates
+        else {
+            // random single-qubit gates
+            for (int j = 0; j < numQubits; ++ j) {
+                gTyp = random(4);
+                if (gTyp == 0) {
+                    qc.h(j);
+                }
+                else if (gTyp == 1) {
+                    qc.z(j);
+                }
+                else if (gTyp == 2) {
+                    qc.x(j);
+                } else {
+                    qc.ry((double)rand() / RAND_MAX * 2 * M_PI, j);
+                }
+            }
+        }
+
+        if (qc.numDepths >= numDepths) {
+            break;
+        }
+    }
+
+    qc.print();
+    return qc;
+}
+
+
+QCircuit RandomRandom(int numQubits, int numDepths) {
+    QCircuit qc = QCircuit(numQubits);
+
+    while (true) {
+        // add two levels of CX gates
+        if (qc.numDepths % 10 == 2) {
+            for (int j = numQubits - 1; j > 0; j -= 2) {
+                qc.cx(j, j-1);
+            }
+            // for (int j = numQubits - 2; j > 0; j -= 2) {
+            //     qc.cx(j, j-1);
+            // }
+        }
+        // add one level of single-qubit gates
+        else {
+            // random single-qubit gates
+            for (int j = 0; j < numQubits; ++ j) {
+                qc.ry((double)rand() / RAND_MAX * 2 * M_PI, j);
+            }
+        }
+
+        if (qc.numDepths >= numDepths) {
+            break;
+        }
+    }
+
+    qc.print();
+    return qc;
+}
+
 /**
  * @brief Generate a random dense circuit
  * 
@@ -227,25 +341,33 @@ QCircuit VQC2(int numQubits) {
 }
 
 
-QCircuit test() {
-    int numQubits = 6;
+QCircuit test(int numQubits, int numDepths, int memQubits) {
     QCircuit qc = QCircuit(numQubits);
 
-    for (int k = 0; k < 2; ++ k)
-        for (int i = 0; i < numQubits; ++ i)
-            qc.ry(2 * std::acos(-1.0), i);
+    for (int j = numQubits - 1; j >= 0; -- j) {
+        qc.h(j);
+    }
 
-    qc.swap(0, 1);
-    qc.swap(2, 3);
-    qc.swap(4, 5);
-    
-    qc.swap(0, 1);
-    qc.swap(2, 3);
-    qc.swap(4, 5);
+    for (int j = numQubits - 1; j >= 0; -- j) {
+        qc.ry((double)rand() / RAND_MAX * 2 * M_PI, j);
+    }
 
-    for (int k = 0; k < 2; ++ k)
-        for (int i = 0; i < numQubits; ++ i)
-            qc.ry(2 * std::acos(-1.0), i);
+    // for (int i = 2; i < numDepths; ++ i) {
+    //     for (int j = numQubits - 1; j >= 0; -- j) {
+    //         if (j == memQubits) {
+    //             qc.cx(j, j-1);
+    //         }
+    //         else if (j != memQubits - 1){
+    //             qc.ry((double)rand() / RAND_MAX * 2 * M_PI, j);
+    //         }
+    //     }
+    // }
+    for (int i = 2; i < numDepths; ++ i) {
+        for (int j = numQubits - 1; j > 0; j -= 2) {
+            qc.cx(j, j-1);
+        }
+    }
 
+    qc.print();
     return qc;
 }

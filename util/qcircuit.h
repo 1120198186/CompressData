@@ -216,16 +216,25 @@ public:
      */
     void print() {
         cout << "numQubits: " << numQubits << " numDepths: " << numDepths << endl;
-        for (int i = 0; i < numQubits; ++ i) {
-            if (i > 10) {
-                cout << "..." << endl;
-                break;
-            }
+        int start = 0;
+        if (numQubits > 5) {
+            start = numQubits - 5;
+        }
+        for (int i = start; i < numQubits; ++ i) {
+            // if (i > 5) {
+            //     cout << "..." << endl;
+            //     break;
+            // }
             cout << "q[" << i << "]\t";
             for (int j = 0; j < numDepths; ++ j) {
                 if (j > 10) {
                     cout << "...";
                     break;
+                }
+                if (gates[j][i].is_control_gate_) {
+                    cout << "C";
+                } else if (gates[j][i].is_target_gate_) {
+                    cout << "T";
                 }
                 cout << gates[j][i].gate_name_ << "\t"; 
             }
@@ -254,6 +263,37 @@ private:
     }
 };
 
+
+/**
+ * @brief Random a circuit with regular state vector using H, Z, X, CX gates
+ * 
+ * @param numQubits 
+ * @param numDepths
+ * @return QCircuit 
+ */
+QCircuit RandomRegular(int numQubits, int numDepths);
+
+
+/**
+ * @brief Random a circuit with relatively random state vector using H, Z, X, RY, CX gates
+ * 
+ * @param numQubits 
+ * @param numDepths 
+ * @return QCircuit 
+ */
+QCircuit RandomMedium(int numQubits, int numDepths);
+
+
+/**
+ * @brief Random a circuit with random state vector using RY, CX gates
+ * 
+ * @param numQubits 
+ * @param numDepths 
+ * @return QCircuit 
+ */
+QCircuit RandomRandom(int numQubits, int numDepths);
+
+
 /**
  * @brief Generate a random dense circuit
  * 
@@ -262,6 +302,7 @@ private:
  * @return a quantum circuit
  */
 QCircuit Random(int numQubits, int numDepths, double propt=0.1);
+
 
 /**
  * @brief Generate a Grover's circuit
@@ -272,7 +313,9 @@ QCircuit Random(int numQubits, int numDepths, double propt=0.1);
  */
 QCircuit Grover(int numQubits);
 
+
 QCircuit QFT(int numQubits);
+
 
 /**
  * @brief Generate VQC
@@ -283,6 +326,7 @@ QCircuit QFT(int numQubits);
  */
 QCircuit VQC(int numQubits);
 
+
 /**
  * @brief Generate VQC1 (a small number of inseparable levels)
  * 
@@ -291,6 +335,7 @@ QCircuit VQC(int numQubits);
  * @return a quantum circuit
  */
 QCircuit VQC1(int numQubits);
+
 
 /**
  * @brief Generate VQC2 (a larger number of inseparable levels)
@@ -301,6 +346,7 @@ QCircuit VQC1(int numQubits);
  */
 QCircuit VQC2(int numQubits);
 
-QCircuit test();
+
+QCircuit test(int numQubits, int numDepths, int memQubits);
 
 #endif // QCIRCUIT_H

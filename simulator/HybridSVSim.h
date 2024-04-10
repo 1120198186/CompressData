@@ -7,8 +7,8 @@
 /**
  * @brief Conduct the hybrid simulation
  * 
- * @param qc 
- * @param memQubits 
+ * @param qc        the quantum circuit
+ * @param memQubits the number of qubits storable in the memory
  */
 void HybridSVSim(QCircuit &qc, int memQubits);
 
