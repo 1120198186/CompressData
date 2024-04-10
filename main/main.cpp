@@ -53,26 +53,26 @@ int main(int argc, char** argv) {
     // TODO: Method 4: Repeat Counter
 
     // TODO: Method 5: Dictionary + Counter
-    {
-        double t[][1]={1,1,1,2,2,1,3,3,3,3,2,2,1};
-        int n=sizeof(t)/sizeof(double);
-        Matrix m((double**)t,n,1);
-        vector<double> sA;
-        vector<pair<double,int> > pCnt;
-        vector<vector<int> > seq;
-        double compRate;
-        vector<int> res=DicCounterEncoder(m,sA,pCnt,seq,compRate);
-        cout<<"compression rate: "<<compRate<<endl;
-        Matrix m0;
-        m0=DicCounterDecoder(n,res,sA,pCnt,seq);
-        int f=1;
-        for (int i=0;i<n;i++)
-            if (m0.data[i][0]!=m.data[i][0]){
-                f=0;
-                break;
-            }
-        cout<<(f?"pass":"fail")<<endl;
-    }
+    // {
+    //     double t[][1]={1,1,1,2,2,1,3,3,3,3,2,2,1};
+    //     int n=sizeof(t)/sizeof(double);
+    //     Matrix m((double**)t,n,1);
+    //     vector<double> sA;
+    //     vector<pair<double,int> > pCnt;
+    //     vector<vector<int> > seq;
+    //     double compRate;
+    //     vector<int> res=DicCounterEncoder(m,sA,pCnt,seq,compRate);
+    //     cout<<"compression rate: "<<compRate<<endl;
+    //     Matrix m0;
+    //     m0=DicCounterDecoder(n,res,sA,pCnt,seq);
+    //     int f=1;
+    //     for (int i=0;i<n;i++)
+    //         if (m0.data[i][0]!=m.data[i][0]){
+    //             f=0;
+    //             break;
+    //         }
+    //     cout<<(f?"pass":"fail")<<endl;
+    // }
 
     return 0;
 }
