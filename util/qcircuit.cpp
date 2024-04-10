@@ -49,7 +49,7 @@ QCircuit Grover(int numQubits) {
         qc.h(i);
     }
 
-    int numIterations = static_cast<int>(round(M_PI / 4 * sqrt(pow(2, numQubits))));
+    int numIterations = static_cast<int>(round(std::acos(-1.0) / 4 * sqrt(pow(2, numQubits))));
 
     for (int itr = 0; itr < numIterations; ++ itr) {
         qc.z(0);
@@ -63,7 +63,7 @@ QCircuit Grover(int numQubits) {
         for (int i = 0; i < numQubits; ++ i) {
             qc.x(i);
         }
-        qc.ry(2 * M_PI, numQubits-1);
+        qc.ry(2 * std::acos(-1.0), numQubits-1);
         for (int i = 0; i < numQubits; ++ i) {
             qc.h(i);
         }
@@ -204,12 +204,12 @@ QCircuit VQC2(int numQubits) {
 
     for (int k = 0; k < 2; ++ k)
         for (int i = 0; i < numQubits; ++ i)
-            qc.ry(2 * M_PI, i);
+            qc.ry(2 * std::acos(-1.0), i);
     
     for (int i = 0; i < numQubits; ++ i) {
         for (int k = 0; k < 5; ++ k)
             for (int ii = 0; ii < numQubits; ++ ii)
-                qc.ry(2 * M_PI, ii);
+                qc.ry(2 * std::acos(-1.0), ii);
         
         for (int j = 0; j < numQubits; ++ j) {
             if (i == j)
@@ -221,7 +221,7 @@ QCircuit VQC2(int numQubits) {
 
     for (int k = 0; k < 2; ++ k)
         for (int i = 0; i < numQubits; ++ i)
-            qc.ry(2 * M_PI, i);
+            qc.ry(2 * std::acos(-1.0), i);
 
     return qc;
 }
@@ -233,7 +233,7 @@ QCircuit test() {
 
     for (int k = 0; k < 2; ++ k)
         for (int i = 0; i < numQubits; ++ i)
-            qc.ry(2 * M_PI, i);
+            qc.ry(2 * std::acos(-1.0), i);
 
     qc.swap(0, 1);
     qc.swap(2, 3);
@@ -245,7 +245,7 @@ QCircuit test() {
 
     for (int k = 0; k < 2; ++ k)
         for (int i = 0; i < numQubits; ++ i)
-            qc.ry(2 * M_PI, i);
+            qc.ry(2 * std::acos(-1.0), i);
 
     return qc;
 }
