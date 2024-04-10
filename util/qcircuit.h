@@ -263,6 +263,7 @@ private:
     }
 };
 
+
 /**
  * @brief Random a circuit with regular state vector using H, Z, X, CX gates
  * 
@@ -274,7 +275,17 @@ QCircuit RandomRegular(int numQubits, int numDepths);
 
 
 /**
- * @brief Random a circuit with random state vector using H, Z, X, RY, CX gates
+ * @brief Random a circuit with relatively random state vector using H, Z, X, RY, CX gates
+ * 
+ * @param numQubits 
+ * @param numDepths 
+ * @return QCircuit 
+ */
+QCircuit RandomMedium(int numQubits, int numDepths);
+
+
+/**
+ * @brief Random a circuit with random state vector using RY, CX gates
  * 
  * @param numQubits 
  * @param numDepths 

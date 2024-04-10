@@ -21,8 +21,8 @@ int main(int argc, char** argv) {
     // Generate a quantum circuit
     // 
     // QCircuit qc = RandomRegular(numQubits, numDepths);
+    // QCircuit qc = RandomMedium(numQubits, numDepths);
     QCircuit qc = RandomRandom(numQubits, numDepths);
-    // QCircuit qc = test(numQubits, numDepths);
 
     Timer timer;
 

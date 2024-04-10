@@ -41,7 +41,7 @@ QCircuit RandomRegular(int numQubits, int numDepths) {
 }
 
 
-QCircuit RandomRandom(int numQubits, int numDepths) {
+QCircuit RandomMedium(int numQubits, int numDepths) {
     QCircuit qc = QCircuit(numQubits);
     int gTyp;
 
@@ -71,6 +71,37 @@ QCircuit RandomRandom(int numQubits, int numDepths) {
                 } else {
                     qc.ry((double)rand() / RAND_MAX * 2 * M_PI, j);
                 }
+            }
+        }
+
+        if (qc.numDepths >= numDepths) {
+            break;
+        }
+    }
+
+    qc.print();
+    return qc;
+}
+
+
+QCircuit RandomRandom(int numQubits, int numDepths) {
+    QCircuit qc = QCircuit(numQubits);
+
+    while (true) {
+        // add two levels of CX gates
+        if (qc.numDepths % 10 == 2) {
+            for (int j = numQubits - 1; j > 0; j -= 2) {
+                qc.cx(j, j-1);
+            }
+            // for (int j = numQubits - 2; j > 0; j -= 2) {
+            //     qc.cx(j, j-1);
+            // }
+        }
+        // add one level of single-qubit gates
+        else {
+            // random single-qubit gates
+            for (int j = 0; j < numQubits; ++ j) {
+                qc.ry((double)rand() / RAND_MAX * 2 * M_PI, j);
             }
         }
 
