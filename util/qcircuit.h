@@ -216,16 +216,25 @@ public:
      */
     void print() {
         cout << "numQubits: " << numQubits << " numDepths: " << numDepths << endl;
-        for (int i = 0; i < numQubits; ++ i) {
-            if (i > 5) {
-                cout << "..." << endl;
-                break;
-            }
+        int start = 0;
+        if (numQubits > 5) {
+            start = numQubits - 5;
+        }
+        for (int i = start; i < numQubits; ++ i) {
+            // if (i > 5) {
+            //     cout << "..." << endl;
+            //     break;
+            // }
             cout << "q[" << i << "]\t";
             for (int j = 0; j < numDepths; ++ j) {
                 if (j > 10) {
                     cout << "...";
                     break;
+                }
+                if (gates[j][i].is_control_gate_) {
+                    cout << "C";
+                } else if (gates[j][i].is_target_gate_) {
+                    cout << "T";
                 }
                 cout << gates[j][i].gate_name_ << "\t"; 
             }

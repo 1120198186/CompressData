@@ -31,7 +31,7 @@ QCircuit RandomRegular(int numQubits, int numDepths) {
             }
         }
 
-        if (qc.numDepths == numDepths) {
+        if (qc.numDepths >= numDepths) {
             break;
         }
     }
@@ -74,7 +74,7 @@ QCircuit RandomRandom(int numQubits, int numDepths) {
             }
         }
 
-        if (qc.numDepths == numDepths) {
+        if (qc.numDepths >= numDepths) {
             break;
         }
     }
