@@ -347,6 +347,6 @@ QCircuit VQC1(int numQubits);
 QCircuit VQC2(int numQubits);
 
 
-QCircuit test(int numQubits, int numDepths);
+QCircuit test(int numQubits, int numDepths, int memQubits);
 
 #endif // QCIRCUIT_H

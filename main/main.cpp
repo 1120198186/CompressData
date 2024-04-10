@@ -22,7 +22,8 @@ int main(int argc, char** argv) {
     // 
     // QCircuit qc = RandomRegular(numQubits, numDepths);
     // QCircuit qc = RandomMedium(numQubits, numDepths);
-    QCircuit qc = RandomRandom(numQubits, numDepths);
+    // QCircuit qc = RandomRandom(numQubits, numDepths);
+    QCircuit qc = test(numQubits, numDepths, memQubits);
 
     Timer timer;
 

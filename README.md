@@ -24,19 +24,19 @@
    - [x] 2-qubit non-controlled gates in either high-order or low-order
    - [ ] 2-qubit non-controlled gates that causes inseprable levels
 
-5. 基于QuanPath分块的无压缩模拟（**调试中**）
+5. 基于QuanPath分块的无压缩模拟（**已完成**）
 
    `simulator/HybridSVSim.[h/cpp]`
 
    - [x] 块的内外存交换
    - [x] 逐个载入块到内存，执行单块内的indexing计算（在`LocalComputing`中已经实现）
-   - [ ] 最后的Merge操作
+   - [x] 最后的Merge操作
    - [ ] 用线程计算高位操作矩阵
 
 6. 对于分块BDD压缩+indexing来说，需要实现（可以写到`util/compress.h`文件里）（**暂时放弃**）
    - [ ] 对`localSv`初始态的压缩
    - [ ] 计算压缩率
-   - [ ] 需要实现块的定位（找到参与indexing的块）
+   - [x] 需要实现块的定位（找到参与indexing的块）
    - [ ] 参与运算的块的解压缩
    - [ ] 多块参与的indexing运算（在`LocalComputing`中实现了一个单块indexing，可以参考）
    - [ ] 重新压缩（和初始态压缩用的是同一个函数）
