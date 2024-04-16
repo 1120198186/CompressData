@@ -14,7 +14,7 @@ def qiskitSim(circ) :
     result = simulator.run(circ).result()
 #     statevector = result.get_statevector(circ)
 #     print(statevector)
-    print(result.data(0))
+    # print(result.data(0))
 
 def ddSim(circ) :
     sim = CircuitSimulator(circ)
@@ -24,7 +24,7 @@ def ddSim(circ) :
 #     print(object_size)
 
 if __name__ == '__main__':
-    circ = Random(nqubit=10, nstep=10)
+    circ = RandomRegular(numQubits=20, numDepths=20)
 
     # circ = VQC(10)
     # circ = QFT(400)

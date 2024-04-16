@@ -21,6 +21,23 @@ void InitStateVectorSSD(long long N, long long numFiles, string dir) {
 }
 
 
+void InitRandomStateVectorSSD(long long N, long long numFiles, string dir) {
+    stringstream filenameStream;
+    long long fileSize = N / numFiles;
+
+    for (long long i = 0; i < numFiles; ++ i) {
+        filenameStream.str(""); // clear the stream
+        filenameStream << dir << i;
+        ofstream file(filenameStream.str()); // 打开文件
+
+        for (long long j = 0; j < fileSize; ++ j) {
+            file << (double)rand() / RAND_MAX << endl;
+        }
+    }
+    return;
+}
+
+
 void ReadBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir) {
     long long filename;
     stringstream filenameStream;

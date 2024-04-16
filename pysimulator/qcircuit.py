@@ -9,9 +9,9 @@ def RandomRegular(numQubits, numDepths):
 
     while True:
         if qc.depth() % 10 == 2:
-            for j in range(numQubits-1, -1, -2):
+            for j in range(numQubits-1, 0, -2):
                 qc.cx(j, j-1)
-            for j in range(numQubits-2, -1, -2):
+            for j in range(numQubits-2, 0, -2):
                 qc.cx(j, j-1)
         else:
             for j in range(numQubits):
@@ -38,9 +38,9 @@ def RandomRandom(numQubits, numDepths):
 
     while True:
         if qc.depth() % 10 == 2:
-            for j in range(numQubits-1, -1, -2):
+            for j in range(numQubits-1, 0, -2):
                 qc.cx(j, j-1)
-            for j in range(numQubits-2, -1, -2):
+            for j in range(numQubits-2, 0, -2):
                 qc.cx(j, j-1)
         else:
             for j in range(numQubits):

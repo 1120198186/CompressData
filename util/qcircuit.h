@@ -17,7 +17,6 @@ public:
     int numQubits;
     int numDepths;
     vector<vector<MatrixImp>> gates;
-    // Matrix sv = Matrix(1 << numQubits, 1);
 
     QCircuit() {};
 
@@ -28,14 +27,13 @@ public:
      * @param numDepths_ #Depths
      */
     QCircuit(int numQubits_): numQubits(numQubits_){
-        // sv.data[0][0] = 1;
         numDepths = 0;
         add_level();
     }
 
     // 
     // Single-qubit gates
-    // TODO: Other single-qubit gates: Z, RX, RY, ...
+    // TODO: Other single-qubit gates: RX, RY, ...
     // 
 
     /**
@@ -220,7 +218,8 @@ public:
         if (numQubits > 5) {
             start = numQubits - 5;
         }
-        for (int i = start; i < numQubits; ++ i) {
+        for (int i = numQubits - 1; i >= start; -- i) {
+        // for (int i = start; i < numQubits; ++ i) {
             // if (i > 5) {
             //     cout << "..." << endl;
             //     break;
