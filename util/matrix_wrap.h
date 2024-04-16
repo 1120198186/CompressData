@@ -146,7 +146,7 @@ void GenerateMatrixImpsFromFile(vector<vector<MatrixImp>> &gates, string fname);
 //                 tmp[0][0] = 1;
 //                 tmp[0][1] = 0;
 //                 tmp[1][0] = 0;
-//                 tmp[1][1] = cos(2 * M_PI / pow(2, i + 1));
+//                 tmp[1][1] = cos(2 * acos(-1.0) / pow(2, i + 1));
 //                 tmp_matrix.push_back(MatrixImp("UROT", true, false, n-i-1, n-1, Matrix(tmp, 2, 2)));
 //                 // tmp_matrix.push_back(MatrixImp("UROT", true, true, n-i-1, n-1, Matrix(tmp, 2, 2)));
 //                 delete [] tmp[0];
@@ -168,7 +168,7 @@ void GenerateMatrixImpsFromFile(vector<vector<MatrixImp>> &gates, string fname);
 //     }
 //     gates.push_back(std::move(hs0));
 //     hs0.clear();
-//     const long long numIteration = (M_PI / 4.0) * (sqrt(pow(2, numQubits)));
+//     const long long numIteration = (acos(-1.0) / 4.0) * (sqrt(pow(2, numQubits)));
 //     for (long long iter = 0; iter < numIteration; iter++) {
 //         hs0.emplace_back("Z");
 //         for (int i = 1; i < numQubits; i++) {

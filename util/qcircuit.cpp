@@ -69,7 +69,7 @@ QCircuit RandomMedium(int numQubits, int numDepths) {
                 else if (gTyp == 2) {
                     qc.x(j);
                 } else {
-                    qc.ry((double)rand() / RAND_MAX * 2 * M_PI, j);
+                    qc.ry((double)rand() / RAND_MAX * 2 * acos(-1.0), j);
                 }
             }
         }
@@ -101,7 +101,7 @@ QCircuit RandomRandom(int numQubits, int numDepths) {
         else {
             // random single-qubit gates
             for (int j = 0; j < numQubits; ++ j) {
-                qc.ry((double)rand() / RAND_MAX * 2 * M_PI, j);
+                qc.ry((double)rand() / RAND_MAX * 2 * acos(-1.0), j);
             }
         }
 
@@ -349,7 +349,7 @@ QCircuit test(int numQubits, int numDepths, int memQubits) {
     }
 
     for (int j = numQubits - 1; j >= 0; -- j) {
-        qc.ry((double)rand() / RAND_MAX * 2 * M_PI, j);
+        qc.ry((double)rand() / RAND_MAX * 2 * acos(-1.0), j);
     }
 
     // for (int i = 2; i < numDepths; ++ i) {
@@ -358,7 +358,7 @@ QCircuit test(int numQubits, int numDepths, int memQubits) {
     //             qc.cx(j, j-1);
     //         }
     //         else if (j != memQubits - 1){
-    //             qc.ry((double)rand() / RAND_MAX * 2 * M_PI, j);
+    //             qc.ry((double)rand() / RAND_MAX * 2 * acos(-1.0), j);
     //         }
     //     }
     // }
