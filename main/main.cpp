@@ -39,16 +39,16 @@ int main(int argc, char** argv) {
     timer.ElapsedTime();
 
     // Method 2: Block-based SVSim
-    timer.Start();
-    BlockSVSim(qc, memQubits);
-    timer.End();
-    timer.ElapsedTime();
+    // timer.Start();
+    // BlockSVSim(qc, memQubits);
+    // timer.End();
+    // timer.ElapsedTime();
 
     // Method 3: Hybrid SVSim
-    timer.Start();
-    HybridSVSim(qc, memQubits);
-    timer.End();
-    timer.ElapsedTime();
+    // timer.Start();
+    // HybridSVSim(qc, memQubits);
+    // timer.End();
+    // timer.ElapsedTime();
 
     // TODO: Method 4: Repeat Counter
 
