@@ -1,4 +1,8 @@
+import os
+import sys
 import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
 from qiskit import transpile
 from qiskit_aer import AerSimulator
 from Grover import Grover
@@ -34,26 +38,30 @@ def processSvDict(svDict):
         imagParts = np.imag(sv)
         if not np.all(np.abs(imagParts) < 1e-15):
             print(f'[WARNING] Imaginary parts are not all zero for state vector {key}!')
-        else:
-            cratio = compressionRatio(realParts)
-            cratioList.append(cratio)
-            print(f'sv[{key}]: compression ratio = {cratio}')
-            print(f'sv[{key}]: {realParts}')
-    
+        cratio = compressionRatio(realParts)
+        cratioList.append(cratio)
+        # print(f'sv[{key}]: compression ratio = {cratio}')
+        print(f'sv[{key}]: {realParts}')
+
+    # plot the compression ratios
+    currDir = os.path.dirname(os.path.abspath(sys.argv[0]))
+    df = pd.DataFrame(cratioList)
+    df.to_excel(f'{currDir}/cratio.xlsx', index=True)
     plotCratio(cratioList)
     return
 
 def compressionRatio(sv):
     ''' Calculate the compression ratio of a given state vector '''
-    cratio = 0
     # TODO: implement the compression ratio calculation
-    print('[TODO] Implement the compression ratio calculation')
+    cratio = sv[0]
     return cratio
 
 def plotCratio(cratioList):
-    ''' Plot the compression ratios during the simulation '''
-    # TODO: plot the cratioList
-    pass
+    ''' Plot the compression ratios '''
+    x = np.arange(len(cratioList))
+    plt.plot(x, cratioList)
+    plt.show()
+    return
 
 if __name__ == '__main__':
     qc = Grover(3)
