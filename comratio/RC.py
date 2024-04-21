@@ -15,7 +15,7 @@ class ComData :
         #print(this.after)
         for i in ll :
             #print(type(i))
-            t = np.round(i,3)
+            t = np.round(i,2)
             if not this.later or this.later[-1][0]!= t :
                 this.later.append([t,1])
                 this.number += 1
