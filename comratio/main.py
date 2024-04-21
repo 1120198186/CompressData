@@ -5,8 +5,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from qiskit import transpile
 from qiskit_aer import AerSimulator
+
 from Grover import Grover
 from QFT import QFT
+from Random import RandomRegular, RandomMedium, RandomRandom
 
 '''
 The versions of qiskit and qiskit-aer used in this script:
@@ -42,7 +44,7 @@ def processSvDict(svDict):
         cratio = compressionRatio(realParts)
         cratioList.append(cratio)
         # print(f'sv[{key}]: compression ratio = {cratio}')
-        print(f'sv[{key}]: {realParts}')
+        # print(f'sv[{key}]: {realParts}')
 
     # plot the compression ratios
     currDir = os.path.dirname(os.path.abspath(sys.argv[0]))
@@ -65,7 +67,18 @@ def plotCratio(cratioList):
     return
 
 if __name__ == '__main__':
-    # qc = Grover(3)
+    qc = Grover(3)
+    qiskitSim(qc)
+
     qc = QFT(5)
+    qiskitSim(qc)
+
+    qc = RandomRegular(5, 100)
+    qiskitSim(qc)
+
+    qc = RandomMedium(5, 100)
+    qiskitSim(qc)
+
+    qc = RandomRandom(5, 100)
     qiskitSim(qc)
     # qc.draw('mpl') # draw the circuit
