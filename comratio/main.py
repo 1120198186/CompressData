@@ -25,6 +25,7 @@ def processSvDict(svDict):
     Check if the amplitudes in all state vectors are real numbers,
     only save the real parts (currently), and calculate the compression ratio
     '''
+    cratioList = []
     for key, sv in svDict.items():
         sv = np.asarray(sv)
 
@@ -35,8 +36,11 @@ def processSvDict(svDict):
             print(f'[WARNING] Imaginary parts are not all zero for state vector {key}!')
         else:
             cratio = compressionRatio(realParts)
+            cratioList.append(cratio)
             print(f'sv[{key}]: compression ratio = {cratio}')
             print(f'sv[{key}]: {realParts}')
+    
+    plotCratio(cratioList)
     return
 
 def compressionRatio(sv):
@@ -45,6 +49,11 @@ def compressionRatio(sv):
     # TODO: implement the compression ratio calculation
     print('[TODO] Implement the compression ratio calculation')
     return cratio
+
+def plotCratio(cratioList):
+    ''' Plot the compression ratios during the simulation '''
+    # TODO: plot the cratioList
+    pass
 
 if __name__ == '__main__':
     qc = Grover(3)
