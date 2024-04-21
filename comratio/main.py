@@ -6,6 +6,7 @@ import pandas as pd
 from qiskit import transpile
 from qiskit_aer import AerSimulator
 from Grover import Grover
+from QFT import QFT
 
 '''
 The versions of qiskit and qiskit-aer used in this script:
@@ -64,6 +65,7 @@ def plotCratio(cratioList):
     return
 
 if __name__ == '__main__':
-    qc = Grover(3)
+    # qc = Grover(3)
+    qc = QFT(5)
     qiskitSim(qc)
     # qc.draw('mpl') # draw the circuit

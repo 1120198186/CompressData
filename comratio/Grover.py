@@ -1,5 +1,5 @@
-from qiskit import QuantumCircuit
 from math import pi, sqrt
+from qiskit import QuantumCircuit
 from qiskit.circuit.library.standard_gates import ZGate
 
 '''
@@ -12,7 +12,6 @@ def Grover(numQubits):
     qc = QuantumCircuit(numQubits)
     cz = ZGate().control(numQubits-1)
     qubits = [i for i in range(numQubits)]
-
     svCnt = 0
 
     # 1. Apply Hadamard gates to all qubits
