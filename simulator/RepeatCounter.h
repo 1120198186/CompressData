@@ -4,7 +4,7 @@
 #include <vector>
 #include <cmath>
 
-
+#include "qcircuit.h"
 
 
 
@@ -166,7 +166,7 @@ public:
                         nd = nd->next;
                     }
                     else{
-                        Node* ttd = hd;
+                        // Node* ttd = hd;
                         td = nd;
                         while(nn--){
                             Node* t1 = new Node(data.first,step,1);
@@ -174,7 +174,7 @@ public:
                             t1->next = t2;
                             t2->next = td;
                             hd->next = t1;
-                            ttd = t2;
+                            // ttd = t2;
                             td = t1;
 
                             

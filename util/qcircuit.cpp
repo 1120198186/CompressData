@@ -166,22 +166,24 @@ QCircuit Grover(int numQubits) {
     int numIterations = static_cast<int>(round(std::acos(-1.0) / 4 * sqrt(pow(2, numQubits))));
 
     for (int itr = 0; itr < numIterations; ++ itr) {
-        qc.z(0);
+        qc.phaseInv((1 << numQubits) - 1);
         for (int i = 0; i < numQubits; ++ i) {
             qc.h(i);
         }
         for (int i = 0; i < numQubits; ++ i) {
             qc.x(i);
         }
-        qc.z(0);
+        qc.phaseInv((1 << numQubits) - 1);
         for (int i = 0; i < numQubits; ++ i) {
             qc.x(i);
         }
-        qc.ry(2 * std::acos(-1.0), numQubits-1);
+        // qc.ry(2 * std::acos(-1.0), numQubits-1);
         for (int i = 0; i < numQubits; ++ i) {
             qc.h(i);
         }
     }
+
+    qc.print();
     return qc;
 }
 
@@ -366,6 +368,7 @@ QCircuit test(int numQubits, int numDepths, int memQubits) {
             qc.cx(i, j);
             qc.barrier();
         }
+    }
 
     for (int j = numQubits - 1; j >= 0; -- j) {
         qc.ry((double)rand() / RAND_MAX * 2 * acos(-1.0), j);

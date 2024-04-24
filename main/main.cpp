@@ -16,23 +16,26 @@ int main(int argc, char** argv) {
     srand((int)time(0));
 
     int numQubits = atoi(argv[1]); // the number of qubits of the circuit
-    // int memQubits = atoi(argv[2]); // the maximum number of qubits in the memory <= numQubits
+    int memQubits = atoi(argv[2]); // the maximum number of qubits in the memory <= numQubits
     int numDepths = atoi(argv[3]); // the number of depths of the circuit
+
+    cout << "[DEBUG] numQubits: " << numQubits << " memQubits: " << memQubits << " numDepths: " << numDepths << endl;
 
     // 
     // Generate a quantum circuit
     // 
+    QCircuit qc = Grover(numQubits);
     // QCircuit qc = RandomRegular(numQubits, numDepths);
-    QCircuit qc = RandomMedium(numQubits, numDepths);
+    // QCircuit qc = RandomMedium(numQubits, numDepths);
     // QCircuit qc = RandomRandom(numQubits, numDepths);
     // QCircuit qc = test(numQubits, numDepths, memQubits);
 
-    // Timer timer;
+    Timer timer;
 
-    // //
-    // // Call different simulators
-    // //
-    // // Method 1: Local SVSim
+    //
+    // Call different simulators
+    //
+    // Method 1: Local SVSim
     // timer.Start();
     // SVSim(qc);
     // timer.End();

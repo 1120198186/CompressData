@@ -176,7 +176,17 @@ void LocalComputing(Matrix &localV, long long localVLen,
             continue; // the control qubit of a controlled gate
         }
 
-        if (GateSeq[i].gate_.row == 2 && GateSeq[i].gate_.col == 2) {
+        if (GateSeq[i].gate_name_ == "PHINV") {
+            long long idx = GateSeq[i].control_qubit_;
+            if (myRank == (idx >> lowQubit)) {
+                long long localIdxMask = (1 << lowQubit) - 1;
+                long long localIdx = idx & localIdxMask;
+                localV.data[localIdx][0] = -localV.data[localIdx][0];
+                // cout << "[DEBUG]" << myRank << " " << localIdx << " " << localV.data[localIdx][0] << endl;
+            }
+        }
+
+        else if (GateSeq[i].gate_.row == 2 && GateSeq[i].gate_.col == 2) {
             // indexing with gate 2x2
             IndexingWithGate2x2(localV, localVLen, GateSeq[i], i, lowQubit, myRank);
 
