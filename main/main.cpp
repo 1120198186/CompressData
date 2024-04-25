@@ -23,8 +23,8 @@ int main(int argc, char** argv) {
     // Generate a quantum circuit
     // 
     // QCircuit qc = RandomRegular(numQubits, numDepths);
-    QCircuit qc = RandomMedium(numQubits, numDepths);
-    // QCircuit qc = RandomRandom(numQubits, numDepths);
+    // QCircuit qc = RandomMedium(numQubits, numDepths);
+    QCircuit qc = RandomRandom(numQubits, numDepths);
     // QCircuit qc = test(numQubits, numDepths, memQubits);
 
     // Timer timer;
@@ -57,14 +57,14 @@ int main(int argc, char** argv) {
         // double t[][1]={1,1,1,2,2,1,3,3,3,3,2,2,1};
         // int n=sizeof(t)/sizeof(double);
         // Matrix m((double**)t,n,1);
-        // vector<double> sA;
+        // vector<double> amp;
         // vector<pair<double,int> > pCnt;
         // vector<vector<int> > seq;
         // double compRate;
-        // vector<int> res=DicCounterEncoder(m,sA,pCnt,seq,compRate);
+        // vector<int> res=DicCounterEncoder(m,amp,pCnt,seq,compRate);
         // cout<<"compression rate: "<<compRate<<endl;
         // Matrix m0;
-        // m0=DicCounterDecoder(n,res,sA,pCnt,seq);
+        // m0=DicCounterDecoder(n,res,amp,pCnt,seq);
         // int f=1;
         // for (int i=0;i<n;i++)
         //     if (m0.data[i][0]!=m.data[i][0]){
@@ -72,6 +72,8 @@ int main(int argc, char** argv) {
         //         break;
         //     }
         // cout<<(f?"pass":"fail")<<endl;
+
+        // return 0;
 
         try {
             // Initialize the state vector
@@ -94,7 +96,7 @@ int main(int argc, char** argv) {
                 for (auto &x:seq){
                     seqSize+=x.size();
                 }
-                cout<<"uncompressed data size:"<<sizeof(double)*N<<", compressed data size: "<<sizeof(int)*res.size()<<", dict size: "<<sA.size()*sizeof(double)+pCnt.size()*(sizeof(double)+sizeof(int))+seqSize*sizeof(int)<<endl;
+                cout<<"uncompressed data size:"<<sizeof(double)*N<<", compressed data size: "<<sizeof(int)*res.size()<<", lzw dict size: "<<seqSize*sizeof(int)<<endl;
                 // Matrix m0;
                 // m0=DicCounterDecoder(N,res,sA,pCnt,seq);
                 // int f=1;

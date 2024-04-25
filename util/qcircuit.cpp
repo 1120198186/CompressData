@@ -345,10 +345,10 @@ QCircuit test(int numQubits, int numDepths, int memQubits) {
     QCircuit qc = QCircuit(numQubits);
 
     // for (int j = numQubits - 1; j >= 0; -- j) {
-    //     qc.ry((double)rand() / RAND_MAX * 2 * M_PI, j);
+    //     qc.ry((double)rand() / RAND_MAX * 2 * acos(-1.0), j);
     // }
 
-    qc.ry((double)rand() / RAND_MAX * 2 * M_PI, numQubits - 1);
+    qc.ry((double)rand() / RAND_MAX * 2 * acos(-1.0), numQubits - 1);
     for (int j = numQubits - 2; j >= 0; -- j) {
         qc.cx(j, j+1);
     }
@@ -371,11 +371,11 @@ QCircuit test(int numQubits, int numDepths, int memQubits) {
     // }
 
     // for (int j = numQubits - 1; j >= 0; -- j) {
-    //     qc.ry((double)rand() / RAND_MAX * 2 * M_PI, j);
+    //     qc.ry((double)rand() / RAND_MAX * 2 * acos(-1.0), j);
     // }
 
     // for (int j = numQubits - 1; j >= 0; -- j) {
-    //     qc.ry((double)rand() / RAND_MAX * 2 * M_PI, j);
+    //     qc.ry((double)rand() / RAND_MAX * 2 * acos(-1.0), j);
     // }
 
     // for (int i = 0; i < numDepths; ++ i) {
@@ -384,10 +384,10 @@ QCircuit test(int numQubits, int numDepths, int memQubits) {
     //             qc.cx(j, j-1);
     //         }
     //         else if (i <= 2 && j != memQubits - 1){
-    //             qc.ry((double)rand() / RAND_MAX * 2 * M_PI, j);
+    //             qc.ry((double)rand() / RAND_MAX * 2 * acos(-1.0), j);
     //         }
     //         else if (i > 2){
-    //             qc.ry((double)rand() / RAND_MAX * 2 * M_PI, j);
+    //             qc.ry((double)rand() / RAND_MAX * 2 * acos(-1.0), j);
     //         }
     //     }
     // }

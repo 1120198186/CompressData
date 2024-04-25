@@ -4,7 +4,7 @@
 
 vector<int> DicCounterEncoder(
     Matrix &m,
-    vector<double> &sortedAmp,
+    vector<double> &amp,
     vector<pair<double,int> > &ampCnt,
     vector<vector<int> > &seq,
     double &compRate);
@@ -12,7 +12,7 @@ vector<int> DicCounterEncoder(
 Matrix DicCounterDecoder(
     int n,
     vector<int> &v,
-    vector<double> &sortedAmp,
+    vector<double> &amp,
     vector<pair<double,int> > &ampCnt,
     vector<vector<int> > &seq);
 
