@@ -136,6 +136,7 @@ map <string, Matrix*> Gate_dict = { // real gate
         {"RY",      &RY},
         {"MERGE",   &IDE},  // For QuanTrans
         {"MSWAP",   &SWAP}, // For QuanTrans
+        {"PHINV",   &IDE},
 };
 // a global gate dictionary
 

@@ -54,6 +54,7 @@ make
 make cleanssd
 .\obj\main.exe <numQubits> <memQubits> <numDepths>
 python main/merge.py
+make cleanssd && make && .\obj\main.exe 10 16 5 && python main\merge.py
 ```
 
 其中，`numQubits`用于指定随机生成的线路的量子比特个数；`memQubits`说明内存最多能存下的量子比特数量，存不下的需要分块；`numDepths`说明线路深度（层数）。

@@ -106,6 +106,17 @@ public:
         gates[numDepths-1][targ] = MatrixImp("X", false, true, ctrl, targ);
     }
 
+    /**
+     * @brief Inverse the phase of the amplitude with index idx
+     * 
+     * @param idx 
+     */
+    void phaseInv(long long idx) {
+        barrier();
+        gates[numDepths-1][0] = MatrixImp("PHINV", false, false, idx, idx);
+        barrier();
+    }
+
     //
     // 2-qubit non-controlled gates
     // <e.g.> SWAP gates
@@ -215,8 +226,8 @@ public:
     void print() {
         cout << "numQubits: " << numQubits << " numDepths: " << numDepths << endl;
         int start = 0;
-        if (numQubits > 5) {
-            start = numQubits - 5;
+        if (numQubits >= 6) {
+            start = numQubits - 6;
         }
         for (int i = numQubits - 1; i >= start; -- i) {
         // for (int i = start; i < numQubits; ++ i) {
