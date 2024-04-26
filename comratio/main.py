@@ -65,6 +65,14 @@ def compressionRatio(sv):
     #print(cratio)
     return cratio
 
+
+def LibpressioRatio(sv):
+    '''Calculate the compression ratio of a given state vector with Libpressio'''
+
+
+    cratio = 0
+    return cratio
+
 def plotCratio(cratioList):
     ''' Plot the compression ratios '''
     x = np.arange(len(cratioList))
