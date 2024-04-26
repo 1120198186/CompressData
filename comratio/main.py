@@ -34,6 +34,7 @@ def processSvDict(svDict):
     only save the real parts (currently), and calculate the compression ratio
     '''
     cratioList = []
+    cntt = 0
     for i, (key, sv) in enumerate(sorted(svDict.items(), key=lambda x: int(x[0]))):
         sv = np.asarray(sv)
 
@@ -42,7 +43,9 @@ def processSvDict(svDict):
         # imagParts = np.imag(sv)
         # if not np.all(np.abs(imagParts) < 1e-15):
         #     print(f'[WARNING] Imaginary parts are not all zero for state vector {key}!')
-        cratio = compressionRatio(realParts)
+
+        cratio = LibpressioRatio(realParts,cntt)
+        cntt+=1
         cratioList.append(cratio)
         # print(f'sv[{key}]: compression ratio = {cratio}')
         # print(f'sv[{key}]: {realParts}')
@@ -53,8 +56,28 @@ def processSvDict(svDict):
         #     df.to_excel(f'{currDir}/QFT.xlsx', index=True)
 
     # plot the compression ratios
-    plotCratio(cratioList)
+    #plotCratio(cratioList)
     return
+
+
+def LibpressioRatio(sv,cntt):
+    print(sv)
+    print(cntt)
+    '''Calculate the compression ratio of a given state vector with Libpressio'''
+
+
+    '''cratio = LibPress(sv,'sz')
+    print(cratio)
+    return cratio'''
+    dir = 'tempsv/'+str(cntt)+'.txt'
+
+    with open(dir, 'w') as file:
+        for ii in  sv:
+            file.write(str(ii))
+            file.write('\n')
+    return 0
+
+
 
 def compressionRatio(sv):
     ''' Calculate the compression ratio of a given state vector '''
@@ -84,7 +107,7 @@ if __name__ == '__main__':
     # qc = Grover(3)
     # qiskitSim(qc)
 
-    qc = QFT(16)
+    qc = QFT(6)
     qiskitSim(qc)
 
     # qc = RandomRegular(5, 100)
