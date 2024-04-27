@@ -35,8 +35,9 @@ def processSvDict(svDict):
     Check if the amplitudes in all state vectors are real numbers,
     only save the real parts (currently), and calculate the compression ratio
     '''
+    # TODO: change compressors to ['RC', 'SZ', 'ZFP', 'FPZIP']
     # compressors = ['RC', 'SZ', 'ZFP', 'FPZIP']
-    compressors = ['RC']
+    compressors = ['RC'] # currently only support RC
     cratioDict = {}
     for compressor in compressors:
         cratioDict[compressor] = []
@@ -54,9 +55,6 @@ def processSvDict(svDict):
         for compressor in compressors:
             cratio = compressionRatio(realParts, compressor)
             cratioDict[compressor].append(cratio)
-        # cratio = RepeatCounterRatio(realParts)
-        # cratio = LibpressioRatio(realParts)
-
         # print(f'sv[{key}]: compression ratio = {cratio}')
         # print(f'sv[{key}]: {realParts}')
         # if i == len(svDict) - 1:
@@ -68,7 +66,7 @@ def processSvDict(svDict):
     # plot the compression ratios
     print(cratioDict)
 
-    # TODO: plot the cratioDict
+    # TODO: save the cratioDict
     # plotCratio(cratioDict)
     return
 
@@ -93,12 +91,12 @@ def RCRatio(sv):
 
 # cntt = 0
 
-# def LibpressioRatio(sv):
-#     '''Calculate the compression ratio of a given state vector with Libpressio'''
-#     print(sv)
-#     cratio = LibPress(sv,'sz')
-#     print(cratio)
-#     return cratio
+def LibpressioRatio(sv):
+    '''Calculate the compression ratio of a given state vector with Libpressio'''
+    #print(sv)
+    cratio = LibPress(sv,'sz')
+    print(cratio)
+    return cratio
 
     # dir = 'tempsv/'+str(cntt)+'.txt'
     # cntt+=1
