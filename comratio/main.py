@@ -1,6 +1,7 @@
 import os
 import sys
 import numpy as np
+from pprint import pprint
 import matplotlib.pyplot as plt
 import pandas as pd
 from qiskit import transpile
@@ -10,6 +11,7 @@ from Grover import Grover
 from QFT import QFT
 from Random import RandomRegular, RandomMedium, RandomRandom
 from RC import ComData
+from offline import LibPress
 
 '''
 The versions of qiskit and qiskit-aer used in this script:
@@ -33,7 +35,13 @@ def processSvDict(svDict):
     Check if the amplitudes in all state vectors are real numbers,
     only save the real parts (currently), and calculate the compression ratio
     '''
-    cratioList = []
+    # TODO: change compressors to ['RC', 'SZ', 'ZFP', 'FPZIP']
+    # compressors = ['RC', 'SZ', 'ZFP', 'FPZIP']
+    compressors = ['RC'] # currently only support RC
+    cratioDict = {}
+    for compressor in compressors:
+        cratioDict[compressor] = []
+
     for i, (key, sv) in enumerate(sorted(svDict.items(), key=lambda x: int(x[0]))):
         sv = np.asarray(sv)
 
@@ -42,42 +50,69 @@ def processSvDict(svDict):
         # imagParts = np.imag(sv)
         # if not np.all(np.abs(imagParts) < 1e-15):
         #     print(f'[WARNING] Imaginary parts are not all zero for state vector {key}!')
-        cratio = compressionRatio(realParts)
-        cratioList.append(cratio)
+
+        # Calculating the compression ratios
+        for compressor in compressors:
+            cratio = compressionRatio(realParts, compressor)
+            cratioDict[compressor].append(cratio)
         # print(f'sv[{key}]: compression ratio = {cratio}')
         # print(f'sv[{key}]: {realParts}')
         # if i == len(svDict) - 1:
-            
+
         #     currDir = os.path.dirname(os.path.abspath(sys.argv[0]))
         #     df = pd.DataFrame(realParts)
         #     df.to_excel(f'{currDir}/QFT.xlsx', index=True)
 
     # plot the compression ratios
-    print(cratioList)
-    plotCratio(cratioList)
+    print(cratioDict)
+
+    # TODO: save the cratioDict
+    # plotCratio(cratioDict)
     return
 
-def compressionRatio(sv):
-    ''' Calculate the compression ratio of a given state vector '''
-    #print((sv))
-    aa = ComData(sv)
-    cratio = aa.ratio()
-    # print(aa.later)
-    #print(cratio)
+def compressionRatio(sv, compressor):
+    cratio = 0
+    if compressor == 'RC':
+        cratio = RCRatio(sv)
+    # TODO: offline compressors
+    else:
+        cratio = LibPress(sv, compressor)
     return cratio
 
+def RCRatio(sv):
+    ''' Calculate the compression ratio of Repeat Counter '''
+    # print((sv))
+    # aa = ComData(list(sv))
+    rc = ComData(sv)
+    cratio = rc.ratio()
+    # print(aa.later)
+    # print(cratio)
+    return cratio
+
+# cntt = 0
 
 def LibpressioRatio(sv):
     '''Calculate the compression ratio of a given state vector with Libpressio'''
-
-
-    cratio = 0
+    #print(sv)
+    cratio = LibPress(sv,'sz')
+    print(cratio)
     return cratio
 
-def plotCratio(cratioList):
+    # dir = 'tempsv/'+str(cntt)+'.txt'
+    # cntt+=1
+    # with open(dir, 'w') as file:
+    #     for ii in  sv:
+    #         file.write(ii)
+    #         file.write('\n')
+    # return 0
+
+
+def plotCratio(cratioDict):
     ''' Plot the compression ratios '''
-    x = np.arange(len(cratioList))
-    plt.plot(x, cratioList)
+    for key, cratioList in cratioDict:
+        x = np.arange(len(cratioList))
+        plt.plot(x, cratioList, label = key)
+    plt.legend()
     plt.show()
     return
 
