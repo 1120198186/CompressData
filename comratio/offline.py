@@ -19,7 +19,7 @@ def LibPress(sv,name) :
             "compressor_id": name,#"sz"
             "compressor_config": {
                 "sz:error_bound_mode_str": "abs",
-                "sz:abs_err_bound": 1e-6,
+                "sz:abs_err_bound": 1e-3,
                 "sz:metric": "size"
                 }
             })
@@ -27,7 +27,7 @@ def LibPress(sv,name) :
         compressor = PressioCompressor.from_config({
             "compressor_id": "zfp",
             "compressor_config": {
-                "zfp:precision": 5,
+                "zfp:precision": 3,
                 "zfp:metric": "size"
                 }
             })
@@ -51,7 +51,7 @@ def LibPress(sv,name) :
     decompressed = compressor.decode(compressed, decompressed_data)
 
     # print out some metrics collected during compression
-    pprint(1/(compressor.get_metrics()["size:compression_ratio"]))
+    # pprint(1/(compressor.get_metrics()["size:compression_ratio"]))
     # pprint((compressor.get_metrics()))
     return 1/compressor.get_metrics()["size:compression_ratio"]
 

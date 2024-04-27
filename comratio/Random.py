@@ -28,7 +28,7 @@ def RandomRegular(numQubits, numGates):
             qc.save_statevector(label = str(svCnt))
             svCnt += 1
 
-    print(f'[RandomRegular] #Qubits: [{numQubits}] #Depths: [{qc.depth()}] #Saved Statevectors: [{svCnt}]')
+    print(f'[RandomRegular] #Qubits: [{numQubits}] #Depths (#Gates): [{qc.depth()}] #Saved Statevectors: [{svCnt}]')
 
     return qc
 
@@ -60,7 +60,7 @@ def RandomMedium(numQubits, numGates):
             qc.save_statevector(label = str(svCnt))
             svCnt += 1
 
-    print(f'[RandomMedium] #Qubits: [{numQubits}] #Depths: [{qc.depth()}] #Saved Statevectors: [{svCnt}]')
+    print(f'[RandomMedium] #Qubits: [{numQubits}] #Depths (#Gates): [{qc.depth()}] #Saved Statevectors: [{svCnt}]')
     
     return qc
 
@@ -84,6 +84,6 @@ def RandomRandom(numQubits, numGates):
             qc.save_statevector(label = str(svCnt))
             svCnt += 1
 
-    print(f'[RandomRandom] #Qubits: [{numQubits}] #Depths: [{qc.depth()}] #Saved Statevectors: [{svCnt}]')
+    print(f'[RandomRandom] #Qubits: [{numQubits}] #Depths (#Gates): [{qc.depth()}] #Saved Statevectors: [{svCnt}]')
     
     return qc

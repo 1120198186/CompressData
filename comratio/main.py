@@ -26,18 +26,14 @@ def qiskitSim(qc):
     simulator = AerSimulator(method='statevector')
     qc = transpile(qc, simulator) # transpile the CC...Z gate
     svDict = simulator.run(qc).result().data() # get multiple saved state vectors
-    # print(svDict)
-    processSvDict(svDict)
-    return
+    return svDict
 
 def processSvDict(svDict):
     '''
     Check if the amplitudes in all state vectors are real numbers,
     only save the real parts (currently), and calculate the compression ratio
     '''
-    # TODO: change compressors to ['RC', 'SZ', 'ZFP', 'FPZIP']
-    # compressors = ['RC', 'SZ', 'ZFP', 'FPZIP']
-    compressors = ['RC'] # currently only support RC
+    compressors = ['RC', 'SZ', 'ZFP', 'FPZIP']
     cratioDict = {}
     for compressor in compressors:
         cratioDict[compressor] = []
@@ -46,7 +42,9 @@ def processSvDict(svDict):
         sv = np.asarray(sv)
 
         # check if sv is a real state vector
-        realParts = np.real(sv)
+        realParts = np.ascontiguousarray(np.real(sv))
+        # realParts = list(realParts)
+        # realParts = np.array(realParts)
         # imagParts = np.imag(sv)
         # if not np.all(np.abs(imagParts) < 1e-15):
         #     print(f'[WARNING] Imaginary parts are not all zero for state vector {key}!')
@@ -55,57 +53,24 @@ def processSvDict(svDict):
         for compressor in compressors:
             cratio = compressionRatio(realParts, compressor)
             cratioDict[compressor].append(cratio)
-        # print(f'sv[{key}]: compression ratio = {cratio}')
-        # print(f'sv[{key}]: {realParts}')
-        # if i == len(svDict) - 1:
 
-        #     currDir = os.path.dirname(os.path.abspath(sys.argv[0]))
-        #     df = pd.DataFrame(realParts)
-        #     df.to_excel(f'{currDir}/QFT.xlsx', index=True)
+    return cratioDict
 
-    # plot the compression ratios
-    print(cratioDict)
-
-    # TODO: save the cratioDict
-    # plotCratio(cratioDict)
+def WriteToExcel(dic, fname):
+    df = pd.DataFrame(dic)
+    currDir = os.path.dirname(os.path.abspath(sys.argv[0]))
+    df.to_excel(f'{currDir}/cratios/{fname}.xlsx', index=True, engine='openpyxl')
     return
 
 def compressionRatio(sv, compressor):
     cratio = 0
     if compressor == 'RC':
-        cratio = RCRatio(sv)
-    # TODO: offline compressors
+        rc = ComData(sv)
+        cratio = rc.ratio()
+        # print(rc.later)
     else:
         cratio = LibPress(sv, compressor)
     return cratio
-
-def RCRatio(sv):
-    ''' Calculate the compression ratio of Repeat Counter '''
-    # print((sv))
-    # aa = ComData(list(sv))
-    rc = ComData(sv)
-    cratio = rc.ratio()
-    # print(aa.later)
-    # print(cratio)
-    return cratio
-
-# cntt = 0
-
-def LibpressioRatio(sv):
-    '''Calculate the compression ratio of a given state vector with Libpressio'''
-    #print(sv)
-    cratio = LibPress(sv,'sz')
-    print(cratio)
-    return cratio
-
-    # dir = 'tempsv/'+str(cntt)+'.txt'
-    # cntt+=1
-    # with open(dir, 'w') as file:
-    #     for ii in  sv:
-    #         file.write(ii)
-    #         file.write('\n')
-    # return 0
-
 
 def plotCratio(cratioDict):
     ''' Plot the compression ratios '''
@@ -117,18 +82,43 @@ def plotCratio(cratioDict):
     return
 
 if __name__ == '__main__':
-    # qc = Grover(3)
-    # qiskitSim(qc)
 
-    qc = QFT(10)
-    qiskitSim(qc)
+    circuitName, numQubits, qc = None, None, None
 
-    # qc = RandomRegular(5, 100)
-    # qiskitSim(qc)
+    if len(sys.argv) != 3:
+        print('[WARNING] Usage: python main.py <circuit name> <#qubits>')
+        circuitName = input('Please input the circuit name: ')
+        numQubits = int(input('Please input the number of qubits: '))
+    else:
+        circuitName = sys.argv[1]
+        numQubits   = int(sys.argv[2])
+    
+    if circuitName == 'Grover':
+        qc = Grover(numQubits)
+    elif circuitName == 'QFT':
+        qc = QFT(numQubits)
+    elif circuitName == 'RandomRegular':
+        qc = RandomRegular(numQubits, 100)
+    elif circuitName == 'RandomMedium':
+        qc = RandomMedium(numQubits, 100)
+    elif circuitName == 'RandomRandom':
+        qc = RandomRandom(numQubits, 100)
+    else:
+        print('[ERROR] Undefined quantum circuit!')
 
-    # qc = RandomMedium(5, 100)
-    # qiskitSim(qc)
+    svDict = qiskitSim(qc)
+    cratioDict = processSvDict(svDict)
+    WriteToExcel(cratioDict, f'{circuitName}_{qc.num_qubits}')
 
-    # qc = RandomRandom(5, 100)
-    # qiskitSim(qc)
+    # print the worst compression ratio
+    bestCratioDict = {key: min(value) for key, value in cratioDict.items()}
+    print('The best cratio: ')
+    pprint(bestCratioDict)
+    print()
+
+    worstCratioDict = {key: max(value) for key, value in cratioDict.items()}
+    print('The worst cratio: ')
+    pprint(worstCratioDict)
+    print()
+
     # qc.draw('mpl') # draw the circuit

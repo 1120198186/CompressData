@@ -2,10 +2,18 @@
 
 ## In-memory Block-based Simulation Using Offline Compressors
 
+### How to Run
+
 ```
 # activate the virtual environment for libpressio
 spack env activate compress
 
+./cratio.sh
+```
+
+Other useful spack commands. 
+
+```
 # check the packages in this environment
 spack find
 
@@ -14,8 +22,4 @@ spack add xx
 
 # deactivate the virtual environment
 spack env deactivate
-
-# run the testing program
-python offline.py
-
 ```
