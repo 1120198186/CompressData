@@ -53,13 +53,14 @@ def processSvDict(svDict):
         #     df.to_excel(f'{currDir}/QFT.xlsx', index=True)
 
     # plot the compression ratios
+    print(cratioList)
     plotCratio(cratioList)
     return
 
 def compressionRatio(sv):
     ''' Calculate the compression ratio of a given state vector '''
     #print((sv))
-    aa = ComData(list(sv))
+    aa = ComData(sv)
     cratio = aa.ratio()
     # print(aa.later)
     #print(cratio)
@@ -84,7 +85,7 @@ if __name__ == '__main__':
     # qc = Grover(3)
     # qiskitSim(qc)
 
-    qc = QFT(16)
+    qc = QFT(10)
     qiskitSim(qc)
 
     # qc = RandomRegular(5, 100)
