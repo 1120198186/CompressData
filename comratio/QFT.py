@@ -33,7 +33,7 @@ def QFT(numQubits, period=0):
     # the period can be set by applying H gates to high-order qubits
     N = (1 << numQubits)
     numHGates = int(log2(N / period))
-    print(N, numHGates)
+    # print(N, numHGates)
     for i in range(numQubits-1, numQubits-1-numHGates, -1):
         qc.h(i)
         qc.save_statevector(label = str(svCnt))
