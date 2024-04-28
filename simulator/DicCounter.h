@@ -1,20 +1,41 @@
 #pragma once
 
-#include "global_notation.h"
+#include <cmath>
+
+#include "block.h"
+#include "qcircuit.h"
+#include "indexing.h"
 
 vector<int> DicCounterEncoder(
     Matrix &m,
     vector<double> &amp,
-    vector<pair<double,int> > &ampCnt,
+    vector<pair<int,int> > &ampCnt,
     vector<vector<int> > &seq,
     double &compRate);
 
+/**
+ * @brief 
+ * 
+ * @param n 
+ * @param v 
+ * @param amp 
+ * @param ampCnt 
+ * @param seq 
+ * @return Matrix 
+ */
 Matrix DicCounterDecoder(
     int n,
     vector<int> &v,
     vector<double> &amp,
-    vector<pair<double,int> > &ampCnt,
+    vector<pair<int,int> > &ampCnt,
     vector<vector<int> > &seq);
+
+/**
+ * @brief Call the dictionary counter compressor
+ * 
+ * @param qc a quantum circuit
+ */
+void DicCounter(QCircuit &qc, int memQubits);
 
 // /**
 //  * @brief 
