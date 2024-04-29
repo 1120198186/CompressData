@@ -6,7 +6,7 @@ set -e
 cd /home/xulongshan/CompressData/comratio
 mkdir -p cratios
 
-numQubits=10
+numQubits=20
 
 python main.py Grover $numQubits
 python main.py QFT $numQubits

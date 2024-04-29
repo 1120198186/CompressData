@@ -11,27 +11,38 @@ import numpy as np
 # decompressed_data = uncompressed_data.copy()
 
 # load and configure the compressor
+def test():
+    uncompressed_data = np.random.rand(10000)
+    print(uncompressed_data)
+    print(LibPress(uncompressed_data,'sz'))
+    print(LibPress(uncompressed_data,'zfp'))
+    print(LibPress(uncompressed_data,'fpzip'))
+
+
 def LibPress(sv,name) :
     uncompressed_data = sv
     decompressed_data = uncompressed_data.copy()
     if name == 'sz' :
+        #print(1)
         compressor = PressioCompressor.from_config({
-            "compressor_id": name,#"sz"
+            "compressor_id": "sz",#"sz"
             "compressor_config": {
                 "sz:error_bound_mode_str": "abs",
-                "sz:abs_err_bound": 1e-3,
+                "sz:abs_err_bound": 1e-5,
                 "sz:metric": "size"
                 }
             })
     elif name == 'zfp' :
+        #print(2)
         compressor = PressioCompressor.from_config({
             "compressor_id": "zfp",
             "compressor_config": {
-                "zfp:precision": 3,
+                "zfp:precision": 5,
                 "zfp:metric": "size"
                 }
             })
     else :
+        #print(3)
         compressor = PressioCompressor.from_config({
             "compressor_id": "fpzip",
             "compressor_config": {
@@ -48,11 +59,11 @@ def LibPress(sv,name) :
 
     # preform compression and decompression
     compressed = compressor.encode(uncompressed_data)
-    decompressed = compressor.decode(compressed, decompressed_data)
+    #decompressed = compressor.decode(compressed, decompressed_data)
 
     # print out some metrics collected during compression
     # pprint(1/(compressor.get_metrics()["size:compression_ratio"]))
-    # pprint((compressor.get_metrics()))
+    #pprint((compressor.get_metrics()))
     return 1/compressor.get_metrics()["size:compression_ratio"]
 
 
@@ -65,4 +76,5 @@ def initdata(n):
 
 
 if __name__ == '__main__':
-    initdata(26)
+    #initdata(26)
+    test()

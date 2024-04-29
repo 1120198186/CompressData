@@ -13,7 +13,21 @@ class ComData :
         this.after = []
         this.after = ll[::]
         #print(this.after)
-        for i in ll :
+        diff_idx = np.flatnonzero(np.concatenate(([True], ll[1:] != ll[:-1], [True])))
+
+        # 获取不同元素及其连续重复次数
+        unique_values = ll[diff_idx[:-1]]
+        counts = np.diff(diff_idx)
+
+        # 创建结果二维数组
+        this.later = np.column_stack((unique_values, counts))
+
+        # 计算连续重复元素的数量
+        #counts = 1 + repeats.shape[0]  # 加1是因为数组的最后一个元素不参与比较
+
+# 输出结果
+        #print("Counts of consecutive repeated elements:", counts)
+        '''for i in ll :
             #print(type(i))
             t = np.round(i,2)
             if not this.later or this.later[-1][0]!= t :
@@ -21,7 +35,8 @@ class ComData :
                 this.number += 1
             else :
                 this.later[-1][1] += 1
-
+        
+        '''
 
     def ratio(this) :
         #print(len(this.later))

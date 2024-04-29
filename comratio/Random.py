@@ -2,7 +2,7 @@ import random
 from math import pi
 from qiskit import QuantumCircuit
 
-def RandomRegular(numQubits, numGates):
+def RandomRegular(numQubits, numGates,label = 1):
     ''' Generate a random regular circuit using H, Z, X, and CX with a given number of qubits and gates '''
     qc = QuantumCircuit(numQubits)
     svCnt = 0
@@ -27,12 +27,12 @@ def RandomRegular(numQubits, numGates):
             qc.cx(j, j-1)
             qc.save_statevector(label = str(svCnt))
             svCnt += 1
-
-    print(f'[RandomRegular] #Qubits: [{numQubits}] #Depths (#Gates): [{qc.depth()}] #Saved Statevectors: [{svCnt}]')
+    if(label) :
+        print(f'[RandomRegular] #Qubits: [{numQubits}] #Depths (#Gates): [{qc.depth()}] #Saved Statevectors: [{svCnt}]')
 
     return qc
 
-def RandomMedium(numQubits, numGates):
+def RandomMedium(numQubits, numGates,label = 1):
     ''' Generate a random regular circuit using H, Z, X, RY, and CX with a given number of qubits and gates '''
     qc = QuantumCircuit(numQubits)
     svCnt = 0
@@ -59,12 +59,12 @@ def RandomMedium(numQubits, numGates):
             qc.cx(j, j-1)
             qc.save_statevector(label = str(svCnt))
             svCnt += 1
-
-    print(f'[RandomMedium] #Qubits: [{numQubits}] #Depths (#Gates): [{qc.depth()}] #Saved Statevectors: [{svCnt}]')
+    if(label) :
+        print(f'[RandomMedium] #Qubits: [{numQubits}] #Depths (#Gates): [{qc.depth()}] #Saved Statevectors: [{svCnt}]')
     
     return qc
 
-def RandomRandom(numQubits, numGates):
+def RandomRandom(numQubits, numGates,label = 1):
     ''' Generate a random regular circuit using RY and CX with a given number of qubits and gates '''
     qc = QuantumCircuit(numQubits)
     svCnt = 0
@@ -83,7 +83,7 @@ def RandomRandom(numQubits, numGates):
             qc.cx(j, j-1)
             qc.save_statevector(label = str(svCnt))
             svCnt += 1
-
-    print(f'[RandomRandom] #Qubits: [{numQubits}] #Depths (#Gates): [{qc.depth()}] #Saved Statevectors: [{svCnt}]')
+    if(label) :
+        print(f'[RandomRandom] #Qubits: [{numQubits}] #Depths (#Gates): [{qc.depth()}] #Saved Statevectors: [{svCnt}]')
     
     return qc
