@@ -155,7 +155,7 @@ if __name__ == '__main__':
         Execute(qc)
         Display(Execute(qc))
     elif circuitName == 'QFT':
-        qc = QFT(numQubits)
+        qc = QFT(numQubits,2**11)
         #Execute(qc)
         Display(Execute(qc))
     elif circuitName == 'RandomRegular':
