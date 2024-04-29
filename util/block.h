@@ -5,6 +5,7 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
+#include "timer.h"
 #include "global_notation.h"
 
 /**
@@ -13,8 +14,10 @@
  * @param N        the size of the state vector
  * @param numFiles the number of blocks
  * @param dir      the directory of the state vector
+ * 
+ * @return the I/O time (sec)
  */
-void InitStateVectorSSD(long long N, long long numFiles, string dir="./output/");
+double InitStateVectorSSD(long long N, long long numFiles, string dir="./output/");
 
 /**
  * @brief Read a block from the SSD
@@ -23,8 +26,10 @@ void InitStateVectorSSD(long long N, long long numFiles, string dir="./output/")
  * @param blkNo   the block number
  * @param fileCnt the number of files within each block
  * @param dir     the directory of the state vector
+ * 
+ * @return the I/O time (sec)
  */
-void ReadBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir="./output/");
+double ReadBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir="./output/");
 
 /**
  * @brief Read a block for merge operation from SSD
@@ -33,8 +38,10 @@ void ReadBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir="
  * @param mergeNo the merge block number
  * @param H       the number of blocks
  * @param dir     the directory of the state vector
+ * 
+ * @return the I/O time (sec)
  */
-void ReadMergeBlock(Matrix &localSv, long long mergeNo, long long H, string dir="./output/");
+double ReadMergeBlock(Matrix &localSv, long long mergeNo, long long H, string dir="./output/");
 
 /**
  * @brief Write a block from the SSD
@@ -43,7 +50,9 @@ void ReadMergeBlock(Matrix &localSv, long long mergeNo, long long H, string dir=
  * @param blkNo   the block number
  * @param fileCnt the number of files within each block
  * @param dir     the directory of the state vector
+ * 
+ * @return the I/O time (sec)
  */
-void WriteBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir="./output/");
+double WriteBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir="./output/");
 
 #endif // BLOCK_H

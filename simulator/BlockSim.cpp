@@ -1,6 +1,6 @@
-#include "BlockSVSim.h"
+#include "BlockSim.h"
 
-void BlockSVSim(QCircuit &qc, int memQubits) {
+double BlockSim(QCircuit &qc, int memQubits) {
     int numQubits = qc.numQubits;
     long long N = (1 << numQubits);
 
@@ -11,11 +11,13 @@ void BlockSVSim(QCircuit &qc, int memQubits) {
     long long H = (1 << highQubits); // the number of blocks
     long long L = (1 << lowQubits);  // the size of each block
 
+    double ioTime = 0.0;
+
     // 
     // Initialize the state vector
     //
     string dir = "./output/block/";
-    InitStateVectorSSD(N, H, dir);
+    ioTime += InitStateVectorSSD(N, H, dir);
 
     Matrix localSv0 = Matrix(L, 1);
     Matrix localSv1 = Matrix(L, 1);
@@ -32,9 +34,9 @@ void BlockSVSim(QCircuit &qc, int memQubits) {
 
         // low-order gates
         for (long long blkNo = 0; blkNo < H; ++ blkNo) {
-            ReadBlock(localSv0, blkNo, 1, dir);
+            ioTime += ReadBlock(localSv0, blkNo, 1, dir);
             LocalComputing(localSv0, L, qc.gates[i], lowQubits, blkNo);
-            WriteBlock(localSv0, blkNo, 1, dir);
+            ioTime += WriteBlock(localSv0, blkNo, 1, dir);
         }
 
         // high-order gates
@@ -56,8 +58,8 @@ void BlockSVSim(QCircuit &qc, int memQubits) {
                     if (isAccessed[blkNo]) continue;
 
                     // read two blocks
-                    ReadBlock(localSv0, blkNo, 1, dir);
-                    ReadBlock(localSv1, blkNo + blkStride, 1, dir);
+                    ioTime += ReadBlock(localSv0, blkNo, 1, dir);
+                    ioTime += ReadBlock(localSv1, blkNo + blkStride, 1, dir);
 
                     isAccessed[blkNo] = isAccessed[blkNo + blkStride] = true;
 
@@ -86,8 +88,8 @@ void BlockSVSim(QCircuit &qc, int memQubits) {
                     }
 
                     // write back
-                    WriteBlock(localSv0, blkNo, 1, dir);
-                    WriteBlock(localSv1, blkNo + blkStride, 1, dir);
+                    ioTime += WriteBlock(localSv0, blkNo, 1, dir);
+                    ioTime += WriteBlock(localSv1, blkNo + blkStride, 1, dir);
                 }
             }
 
@@ -112,10 +114,10 @@ void BlockSVSim(QCircuit &qc, int memQubits) {
                         if (isAccessed[blkNo]) continue;
 
                         // read four blocks
-                        ReadBlock(localSv0, blkNo, 1, dir);
-                        ReadBlock(localSv1, blkNo + blkStride, 1, dir);
-                        ReadBlock(localSv2, blkNo + blkStride1, 1, dir);
-                        ReadBlock(localSv3, blkNo + blkStride + blkStride1, 1, dir);
+                        ioTime += ReadBlock(localSv0, blkNo, 1, dir);
+                        ioTime += ReadBlock(localSv1, blkNo + blkStride, 1, dir);
+                        ioTime += ReadBlock(localSv2, blkNo + blkStride1, 1, dir);
+                        ioTime += ReadBlock(localSv3, blkNo + blkStride + blkStride1, 1, dir);
 
                         isAccessed[blkNo] = isAccessed[blkNo + blkStride] = isAccessed[blkNo + blkStride1] = isAccessed[blkNo + blkStride + blkStride1] = true;
 
@@ -125,10 +127,10 @@ void BlockSVSim(QCircuit &qc, int memQubits) {
                         }
 
                         // write back
-                        WriteBlock(localSv0, blkNo, 1, dir);
-                        WriteBlock(localSv1, blkNo + blkStride, 1, dir);
-                        WriteBlock(localSv2, blkNo + blkStride1, 1, dir);
-                        WriteBlock(localSv3, blkNo + blkStride + blkStride1, 1, dir);
+                        ioTime += WriteBlock(localSv0, blkNo, 1, dir);
+                        ioTime += WriteBlock(localSv1, blkNo + blkStride, 1, dir);
+                        ioTime += WriteBlock(localSv2, blkNo + blkStride1, 1, dir);
+                        ioTime += WriteBlock(localSv3, blkNo + blkStride + blkStride1, 1, dir);
                     }
                 }
             }
@@ -139,4 +141,6 @@ void BlockSVSim(QCircuit &qc, int memQubits) {
             }
         }
     }
+
+    return ioTime;
 }

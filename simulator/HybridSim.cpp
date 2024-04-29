@@ -1,6 +1,6 @@
-#include "HybridSVSim.h"
+#include "HybridSim.h"
 
-void HybridSVSim(QCircuit &qc, int memQubits) {
+double HybridSim(QCircuit &qc, int memQubits) {
     int numQubits = qc.numQubits;
     long long N = (1 << numQubits);
 
@@ -11,19 +11,26 @@ void HybridSVSim(QCircuit &qc, int memQubits) {
     long long L = (1 << lowQubits);  // the size of each block
     long long numFiles = H * H;      // the number of files
 
+    Timer timer;
+    double ioTime = 0.0;
+
     // 
     // Initialize the state vector
     //
     string dir = "./output/hybrid/";
-    InitStateVectorSSD(N, numFiles, dir);
+    ioTime += InitStateVectorSSD(N, numFiles, dir);
 
     //
     // An independent thread for calculating high-order operation matrix
     // 
     Matrix opMat;
     Matrix_Init_IDE(H, opMat);
-    BuildHighOrderOpMat(opMat, qc, H, lowQubits);
 
+    // timer.Start();
+    BuildHighOrderOpMat(opMat, qc, H, lowQubits);
+    // timer.End();
+    // cout << "[INFO] P0 calculation time: " << timer.ElapsedTime() << endl;
+    
     // cout << endl << endl << "[DEBUG] opMat: " << endl;
     // opMat.print();
     // TODO: thread myThread(std::bind(BuildHighOrderOpMat, opMat, qc, H, lowQubits));
@@ -33,13 +40,13 @@ void HybridSVSim(QCircuit &qc, int memQubits) {
     //
     Matrix localSv = Matrix(L, 1);
     for (long long blkNo = 0; blkNo < H; ++ blkNo) {
-        ReadBlock(localSv, blkNo, H, dir);
+        ioTime += ReadBlock(localSv, blkNo, H, dir);
 
         for (int i = 0; i < qc.numDepths; ++ i) {
             LocalComputing(localSv, L, qc.gates[i], lowQubits, blkNo);
         }
 
-        WriteBlock(localSv, blkNo, H, dir);
+        ioTime += WriteBlock(localSv, blkNo, H, dir);
     }
 
     // myThread.join();
@@ -48,11 +55,11 @@ void HybridSVSim(QCircuit &qc, int memQubits) {
     // Merge
     //
     for (long long mergeNo = 0; mergeNo < H; ++ mergeNo) {
-        ReadMergeBlock(localSv, mergeNo, H, dir);
-        MergeComputing(localSv, opMat, mergeNo, H, dir);
+        ioTime += ReadMergeBlock(localSv, mergeNo, H, dir);
+        ioTime += MergeComputing(localSv, opMat, mergeNo, H, dir);
     }
 
-    return;
+    return ioTime;
 }
 
 
@@ -122,7 +129,7 @@ void BuildHighOrderOpMat(Matrix &opMat, QCircuit &qc, long long H, int lowQubits
 }
 
 
-void MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long long H, string dir) {
+double MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long long H, string dir) {
     long long filename;
     stringstream filenameStream;
     ofstream file;
@@ -130,14 +137,22 @@ void MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long long 
     long long fileSize = localV.row / H; // the number of amplitudes within each file
     double ans;
 
+    Timer timer;
+    double ioTime = 0.0;
+
+    // timer.Start();
+
     for (long long blkNo = 0; blkNo < H; ++ blkNo) { // [blkNo, mergeNo]
         // calculate the filename
         filename = blkNo * H + mergeNo;
 
         // open the file
+        timer.Start();
         filenameStream.str(""); // clear the stream
         filenameStream << dir << "out" << filename;
         file.open(filenameStream.str());
+        timer.End();
+        ioTime += timer.ElapsedTime();
 
         // write the file
         for (long long i = 0; i < fileSize; ++ i) {
@@ -145,9 +160,16 @@ void MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long long 
             for (long long j = 0; j < H; ++ j) {
                 ans += opMat.data[blkNo][j] * localV.data[j * fileSize + i][0];
             }
+            timer.Start();
             file << ans << endl; // write total fileSize amplitudes to file
+            timer.End();
+            ioTime += timer.ElapsedTime();
         }
         file.close();
     }
-    return;
+
+    // timer.End();
+    // ioTime += timer.ElapsedTime();
+
+    return ioTime;
 }

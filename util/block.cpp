@@ -1,13 +1,15 @@
 #include "block.h"
 
-void InitStateVectorSSD(long long N, long long numFiles, string dir) {
+double InitStateVectorSSD(long long N, long long numFiles, string dir) {
+    Timer timer;
+    timer.Start();
     stringstream filenameStream;
     long long fileSize = N / numFiles;
 
     for (long long i = 0; i < numFiles; ++ i) {
         filenameStream.str(""); // clear the stream
         filenameStream << dir << i;
-        ofstream file(filenameStream.str()); // 打开文件
+        ofstream file(filenameStream.str()); // open the file
 
         for (long long j = 0; j < fileSize; ++ j) {
             if (i == 0 && j == 0) {
@@ -17,28 +19,34 @@ void InitStateVectorSSD(long long N, long long numFiles, string dir) {
             }
         }
     }
-    return;
+    timer.End();
+    return timer.ElapsedTime(); // I/O time (sec)
 }
 
 
-void InitRandomStateVectorSSD(long long N, long long numFiles, string dir) {
+double InitRandomStateVectorSSD(long long N, long long numFiles, string dir) {
+    Timer timer;
+    timer.Start();
     stringstream filenameStream;
     long long fileSize = N / numFiles;
 
     for (long long i = 0; i < numFiles; ++ i) {
         filenameStream.str(""); // clear the stream
         filenameStream << dir << i;
-        ofstream file(filenameStream.str()); // 打开文件
+        ofstream file(filenameStream.str()); // open the file
 
         for (long long j = 0; j < fileSize; ++ j) {
             file << (double)rand() / RAND_MAX << endl;
         }
     }
-    return;
+    timer.End();
+    return timer.ElapsedTime(); // I/O time
 }
 
 
-void ReadBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir) {
+double ReadBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir) {
+    Timer timer;
+    timer.Start();
     long long filename;
     stringstream filenameStream;
     ifstream file;
@@ -59,11 +67,14 @@ void ReadBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir) 
         }
         file.close();
     }
-    return;
+    timer.End();
+    return timer.ElapsedTime(); // I/O time
 }
 
 
-void ReadMergeBlock(Matrix &localSv, long long mergeNo, long long H, string dir) {
+double ReadMergeBlock(Matrix &localSv, long long mergeNo, long long H, string dir) {
+    Timer timer;
+    timer.Start();
     long long filename;
     stringstream filenameStream;
     ifstream file;
@@ -88,11 +99,14 @@ void ReadMergeBlock(Matrix &localSv, long long mergeNo, long long H, string dir)
         // remove the file
         remove(filenameStream.str().c_str());
     }
-    return;
+    timer.End();
+    return timer.ElapsedTime(); // I/O time
 }
 
 
-void WriteBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir) {
+double WriteBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir) {
+    Timer timer;
+    timer.Start();
     long long filename;
     stringstream filenameStream;
     ofstream file;
@@ -113,5 +127,6 @@ void WriteBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir)
         }
         file.close();
     }
-    return;
+    timer.End();
+    return timer.ElapsedTime(); // I/O time
 }

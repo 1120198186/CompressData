@@ -2,8 +2,8 @@
 #include "timer.h"
 
 #include "SVSim.h"
-#include "BlockSVSim.h"
-#include "HybridSVSim.h"
+#include "BlockSim.h"
+#include "HybridSim.h"
 #include "DicCounter.h"
 
 int main(int argc, char** argv) {
@@ -18,18 +18,21 @@ int main(int argc, char** argv) {
     int memQubits = atoi(argv[2]); // the maximum number of qubits in the memory <= numQubits
     int numDepths = atoi(argv[3]); // the number of depths of the circuit
 
-    cout << "[DEBUG] numQubits: " << numQubits << " memQubits: " << memQubits << " numDepths: " << numDepths << endl;
-
+    cout << "[INFO] numQubits: " << numQubits << " memQubits: " << memQubits << " numDepths: " << numDepths << endl;
+    cout << "[INFO] #Blocks for BlockSim:\t" << (1 << (numQubits - memQubits + 2)) << endl;
+    cout << "[INFO] #Blocks for HybridSim:\t" << (1 << (numQubits - memQubits)) << endl;
     // 
     // Generate a quantum circuit
     // 
-    QCircuit qc = Grover(numQubits);
+    // QCircuit qc = Grover(numQubits);
     // QCircuit qc = RandomRegular(numQubits, numDepths);
     // QCircuit qc = RandomMedium(numQubits, numDepths);
-    // QCircuit qc = RandomRandom(numQubits, numDepths);
+    QCircuit qc = RandomRandom(numQubits, numDepths);
     // QCircuit qc = test(numQubits, numDepths, memQubits);
 
     Timer timer;
+
+    double ioTime = 0.0, simTime = 0.0;
 
     //
     // Call different simulators
@@ -40,22 +43,24 @@ int main(int argc, char** argv) {
     // timer.End();
     // timer.ElapsedTime();
 
-    // Method 2: Block-based SVSim
+    // Method 2: BlockSim
     // timer.Start();
-    // BlockSVSim(qc, memQubits);
+    // ioTime = BlockSim(qc, memQubits) / 1000.0;
     // timer.End();
-    // timer.ElapsedTime();
+    // simTime = timer.ElapsedTime() / 1000.0;
+    // cout << "[INFO] [BlockSim] Sim time:\t" << simTime << " (sec);\tI/O time: " << ioTime << " (sec)\n";
 
-    // Method 3: Hybrid SVSim
-    // timer.Start();
-    // HybridSVSim(qc, memQubits);
-    // timer.End();
-    // timer.ElapsedTime();
+    // Method 3: HybridSim
+    timer.Start();
+    ioTime = HybridSim(qc, memQubits) / 1000.0;
+    timer.End();
+    simTime = timer.ElapsedTime() / 1000.0;
+    cout << "[INFO] [HybridSim] Sim time:\t" << simTime << " (sec);\tI/O time: " << ioTime << " (sec)\n";
 
     // TODO: Method 4: Repeat Counter
 
     // Method 5: Dictionary + Counter
-    DicCounter(qc, memQubits);
+    // DicCounter(qc, memQubits);
 
     return 0;
 }
