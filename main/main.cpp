@@ -38,24 +38,25 @@ int main(int argc, char** argv) {
     // Call different simulators
     //
     // Method 1: Local SVSim
-    // timer.Start();
-    // SVSim(qc);
-    // timer.End();
-    // timer.ElapsedTime();
-
-    // Method 2: BlockSim
-    // timer.Start();
-    // ioTime = BlockSim(qc, memQubits) / 1000.0;
-    // timer.End();
-    // simTime = timer.ElapsedTime() / 1000.0;
-    // cout << "[INFO] [BlockSim] Sim time:\t" << simTime << " (sec);\tI/O time: " << ioTime << " (sec)\n";
-
-    // Method 3: HybridSim
     timer.Start();
-    ioTime = HybridSim(qc, memQubits) / 1000.0;
+    SVSim(qc);
     timer.End();
     simTime = timer.ElapsedTime() / 1000.0;
-    cout << "[INFO] [HybridSim] Sim time:\t" << simTime << " (sec);\tI/O time: " << ioTime << " (sec)\n";
+    cout << "[INFO] [SVSim] Sim time:\t" << simTime << " (sec)" << endl;
+
+    // Method 2: BlockSim
+    timer.Start();
+    ioTime = BlockSim(qc, memQubits) / 1000.0;
+    timer.End();
+    simTime = timer.ElapsedTime() / 1000.0;
+    cout << "[INFO] [BlockSim] Sim time:\t" << simTime << " (sec);\tI/O time: " << ioTime << " (sec)\n";
+
+    // Method 3: HybridSim
+    // timer.Start();
+    // ioTime = HybridSim(qc, memQubits) / 1000.0;
+    // timer.End();
+    // simTime = timer.ElapsedTime() / 1000.0;
+    // cout << "[INFO] [HybridSim] Sim time:\t" << simTime << " (sec);\tI/O time: " << ioTime << " (sec)\n";
 
     // TODO: Method 4: Repeat Counter
 
