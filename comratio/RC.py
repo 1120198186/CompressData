@@ -11,7 +11,7 @@ class ComData :
     def __init__(this,ll) -> None:
         this.later = []
         this.after = []
-        this.after = ll[::]
+        this.after = len(ll)
         #print(this.after)
         diff_idx = np.flatnonzero(np.concatenate(([True], ll[1:] != ll[:-1], [True])))
 
@@ -62,6 +62,6 @@ class ComData :
         # #file.write('\n')
         # file.close()
 
-        return tt / (len(this.after))
+        return tt / ((this.after))
 
 
