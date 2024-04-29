@@ -161,25 +161,33 @@ QCircuit Grover(int numQubits) {
 
     for (int i = 0; i < numQubits; ++ i) {
         qc.h(i);
+        qc.barrier();
     }
 
-    int numIterations = static_cast<int>(round(std::acos(-1.0) / 4 * sqrt(pow(2, numQubits))));
+    // int numIterations = static_cast<int>(round(std::acos(-1.0) / 4 * sqrt(pow(2, numQubits))));
+    int numIterations = 10;
 
     for (int itr = 0; itr < numIterations; ++ itr) {
         qc.phaseInv((1 << numQubits) - 1);
+        qc.barrier();
         for (int i = 0; i < numQubits; ++ i) {
             qc.h(i);
+            qc.barrier();
         }
         for (int i = 0; i < numQubits; ++ i) {
             qc.x(i);
+            qc.barrier();
         }
         qc.phaseInv((1 << numQubits) - 1);
+        qc.barrier();
         for (int i = 0; i < numQubits; ++ i) {
             qc.x(i);
+            qc.barrier();
         }
         // qc.ry(2 * std::acos(-1.0), numQubits-1);
         for (int i = 0; i < numQubits; ++ i) {
             qc.h(i);
+            qc.barrier();
         }
     }
 
