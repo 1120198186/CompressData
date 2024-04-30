@@ -45,18 +45,18 @@ int main(int argc, char** argv) {
     // cout << "[INFO] [SVSim] Sim time:\t" << simTime << " (sec);\tComp time: " << simTime - ioTime << " (sec)\n";
 
     // Method 2: BlockSim
-    // timer.Start();
-    // ioTime = BlockSim(qc, memQubits) / 1e6;
-    // timer.End();
-    // simTime = timer.ElapsedTime() / 1e6;
-    // cout << "[INFO] [BlockSim] Sim time:\t" << simTime << " (sec);\tI/O time: " << ioTime << " (sec)\n";
-
-    // Method 3: HybridSim
     timer.Start();
-    ioTime = HybridSim(qc, memQubits) / 1e6;
+    ioTime = BlockSim(qc, memQubits) / 1e6;
     timer.End();
     simTime = timer.ElapsedTime() / 1e6;
-    cout << "[INFO] [HybridSim] Sim time:\t" << simTime << " (sec);\tI/O time: " << ioTime << " (sec)\n";
+    cout << "[INFO] [BlockSim] Sim time:\t" << simTime << " (sec);\tI/O time: " << ioTime << " (sec)\n";
+
+    // Method 3: HybridSim
+    // timer.Start();
+    // ioTime = HybridSim(qc, memQubits) / 1e6;
+    // timer.End();
+    // simTime = timer.ElapsedTime() / 1e6;
+    // cout << "[INFO] [HybridSim] Sim time:\t" << simTime << " (sec);\tI/O time: " << ioTime << " (sec)\n";
 
     // TODO: Method 4: Repeat Counter
 

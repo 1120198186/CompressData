@@ -19,7 +19,7 @@ OUT_DIR := output
 
 INCFLAGS := -I./$(INC_DIR)/ -I./$(SIM_DIR)/
 
-COMPILE := $(CC) $(CCFLAGS) $(INCFLAGS) -pthread 
+COMPILE := $(CC) $(CCFLAGS) $(INCFLAGS) #-pthread 
 
 # --------------------- utils ----------------------
 
