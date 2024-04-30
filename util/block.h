@@ -15,7 +15,7 @@
  * @param numFiles the number of blocks
  * @param dir      the directory of the state vector
  * 
- * @return the I/O time (sec)
+ * @return the I/O time (us)
  */
 double InitStateVectorSSD(long long N, long long numFiles, string dir="./output/");
 
@@ -27,7 +27,7 @@ double InitStateVectorSSD(long long N, long long numFiles, string dir="./output/
  * @param fileCnt the number of files within each block
  * @param dir     the directory of the state vector
  * 
- * @return the I/O time (sec)
+ * @return the I/O time (us)
  */
 double ReadBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir="./output/");
 
@@ -39,7 +39,7 @@ double ReadBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir
  * @param H       the number of blocks
  * @param dir     the directory of the state vector
  * 
- * @return the I/O time (sec)
+ * @return the I/O time (us)
  */
 double ReadMergeBlock(Matrix &localSv, long long mergeNo, long long H, string dir="./output/");
 
@@ -51,7 +51,7 @@ double ReadMergeBlock(Matrix &localSv, long long mergeNo, long long H, string di
  * @param fileCnt the number of files within each block
  * @param dir     the directory of the state vector
  * 
- * @return the I/O time (sec)
+ * @return the I/O time (us)
  */
 double WriteBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir="./output/");
 

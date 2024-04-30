@@ -1,11 +1,11 @@
 #include "block.h"
 
 double InitStateVectorSSD(long long N, long long numFiles, string dir) {
-    Timer timer;
-    timer.Start();
     stringstream filenameStream;
     long long fileSize = N / numFiles;
 
+    Timer timer;
+    timer.Start();
     for (long long i = 0; i < numFiles; ++ i) {
         filenameStream.str(""); // clear the stream
         filenameStream << dir << i;
@@ -20,16 +20,16 @@ double InitStateVectorSSD(long long N, long long numFiles, string dir) {
         }
     }
     timer.End();
-    return timer.ElapsedTime(); // I/O time (sec)
+    return timer.ElapsedTime(); // I/O time
 }
 
 
 double InitRandomStateVectorSSD(long long N, long long numFiles, string dir) {
-    Timer timer;
-    timer.Start();
     stringstream filenameStream;
     long long fileSize = N / numFiles;
 
+    Timer timer;
+    timer.Start();
     for (long long i = 0; i < numFiles; ++ i) {
         filenameStream.str(""); // clear the stream
         filenameStream << dir << i;
@@ -45,13 +45,13 @@ double InitRandomStateVectorSSD(long long N, long long numFiles, string dir) {
 
 
 double ReadBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir) {
-    Timer timer;
-    timer.Start();
     long long filename;
     stringstream filenameStream;
     ifstream file;
     long long fileSize = localSv.row / fileCnt; // the number of amplitudes within each file
 
+    Timer timer;
+    timer.Start();
     for (long long fileNo = 0; fileNo < fileCnt; ++ fileNo) {
         // calculate the filename
         filename = blkNo * fileCnt + fileNo;
@@ -73,13 +73,13 @@ double ReadBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir
 
 
 double ReadMergeBlock(Matrix &localSv, long long mergeNo, long long H, string dir) {
-    Timer timer;
-    timer.Start();
     long long filename;
     stringstream filenameStream;
     ifstream file;
     long long fileSize = localSv.row / H; // the number of amplitudes within each file
 
+    Timer timer;
+    timer.Start();
     for (long long blkNo = 0; blkNo < H; ++ blkNo) {
         // calculate the filename
         // 0 * H + 0, 1 * H + 0, 2 * H + 0, ..., (H-1) * H + 0
@@ -105,13 +105,13 @@ double ReadMergeBlock(Matrix &localSv, long long mergeNo, long long H, string di
 
 
 double WriteBlock(Matrix &localSv, long long blkNo, long long fileCnt, string dir) {
-    Timer timer;
-    timer.Start();
     long long filename;
     stringstream filenameStream;
     ofstream file;
     long long fileSize = localSv.row / fileCnt; // the number of amplitudes within each file
 
+    Timer timer;
+    timer.Start();
     for (long long fileNo = 0; fileNo < fileCnt; ++ fileNo) {
         // calculate the filename
         filename = blkNo * fileCnt + fileNo;

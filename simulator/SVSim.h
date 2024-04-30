@@ -7,4 +7,4 @@
  * 
  * @param qc a quantum circuit
  */
-void SVSim(QCircuit &qc);
+double SVSim(QCircuit &qc);

@@ -25,11 +25,7 @@ double HybridSim(QCircuit &qc, int memQubits) {
     // 
     Matrix opMat;
     Matrix_Init_IDE(H, opMat);
-
-    // timer.Start();
     BuildHighOrderOpMat(opMat, qc, H, lowQubits);
-    // timer.End();
-    // cout << "[INFO] P0 calculation time: " << timer.ElapsedTime() << endl;
     
     // cout << endl << endl << "[DEBUG] opMat: " << endl;
     // opMat.print();
@@ -140,6 +136,8 @@ double MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long lon
     Timer timer;
     double ioTime = 0.0;
 
+    // double compTime = 0.0;
+
     // timer.Start();
 
     for (long long blkNo = 0; blkNo < H; ++ blkNo) { // [blkNo, mergeNo]
@@ -156,10 +154,14 @@ double MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long lon
 
         // write the file
         for (long long i = 0; i < fileSize; ++ i) {
+            // timer.Start();
             ans = 0.0;
             for (long long j = 0; j < H; ++ j) {
                 ans += opMat.data[blkNo][j] * localV.data[j * fileSize + i][0];
             }
+            // timer.End();
+            // compTime += timer.ElapsedTime();
+
             timer.Start();
             file << ans << endl; // write total fileSize amplitudes to file
             timer.End();
@@ -170,6 +172,7 @@ double MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long lon
 
     // timer.End();
     // ioTime += timer.ElapsedTime();
+    // cout << "[DEBUG] MergeComputing: " << compTime << " us" << endl;
 
     return ioTime;
 }
