@@ -55,14 +55,14 @@ def read(n) :
 
 
 def plot3():
-    l1 = read(50)[:512]
+    l1 = read("tstatevector50.txt")[:512]
     for i in range(512) :
         if(l1[i])>0 and l1[i]<0.149 :
             l1[i]+=0.2
         if l1[i]<0 :
             l1[i]-=0.2
-    l2 = read(271)[:3072]
-    l3 = read(-1)
+    l2 = read("tstatevector271.txt")[:3072]
+    l3 = read("tstatevector-1.txt")
     x1 = [i for i in range(512)]
     x2 = [i for i in range(3072)]
     x3 = [i for i in range(272)]
@@ -126,7 +126,7 @@ def plot3():
 
     #axmain.set_position([0.1, 0.1, 0.8, 0.5])
 
-    plt.tight_layout()
+    #plt.tight_layout()
     plt.rcParams['font.family'] = 'Times New Roman'
     plt.rcParams['font.weight'] = 'bold'
 
@@ -189,8 +189,8 @@ def plot4():
 
 if __name__ == '__main__':
     #test()
-    #plot3()
-    plot4()
+    plot3()
+    #plot4()
     #plotSv(50,0,512)
     #plotSv(271,0,512)
     #plotSv(-1,0,271)
