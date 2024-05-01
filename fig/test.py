@@ -55,6 +55,10 @@ def read(n) :
 
 
 def plot3():
+    
+    plt.rcParams['font.family'] = 'Times New Roman'
+    plt.rcParams['font.weight'] = 'bold'
+
     l1 = read("tstatevector50.txt")[:512]
     for i in range(512) :
         if(l1[i])>0 and l1[i]<0.149 :
@@ -78,7 +82,7 @@ def plot3():
 
     axmain = fig.add_axes([0.1,0.1,0.8,0.8])
     axmain.plot(x3,l3)
-    axmain.set_title('The compression rate of RC')
+    # axmain.set_title('The compression ratio of RC')
     axmain.plot([56.8,50],[0.00465,3.43e-05],linestyle='-', color='black')
     axmain.plot([271,217.5], [0.03125,0.02690], linestyle='-', color='black')
     c1 = Circle((50,0.0000343), radius=0.0001, edgecolor='red', facecolor='blue')
@@ -102,7 +106,7 @@ def plot3():
 
     ax50 = fig.add_axes([0.2,0.27,0.5,0.2])
     ax50.plot(x1,l1)
-    ax50.set_title('StateVector50')
+    ax50.set_title('State Vector 50')
     ax50.set_yticks(ticks = [-0.2,0,0.2,0.5],labels = ['-0.02','0.0','0.02','0.5'])
     ax50.text(0.95, 0.95, '(Required RC Nodes:36)', verticalalignment='top', horizontalalignment='right',
             transform=ax50.transAxes, fontsize=10)
@@ -119,16 +123,14 @@ def plot3():
 
     ax271 = fig.add_axes([0.2,0.62,0.5,0.2])
     ax271.plot(x2, l2)
-    ax271.set_title('StateVector271')
-    ax271.set_yticks(ticks=[-0.001,0,0.01,0.015], labels=['','0.0', '0.01', ''])
+    ax271.set_title('State Vector 271')
+    ax271.set_yticks(ticks=[-0.002,0,0.01,0.015], labels=['','0.0', '0.01', ''])
     ax271.text(0.95, 0.95, '(Required RC Nodes:32768)', verticalalignment='top', horizontalalignment='right',
               transform=ax271.transAxes, fontsize=10)
 
     #axmain.set_position([0.1, 0.1, 0.8, 0.5])
 
     #plt.tight_layout()
-    plt.rcParams['font.family'] = 'Times New Roman'
-    plt.rcParams['font.weight'] = 'bold'
 
 
     plt.show()
