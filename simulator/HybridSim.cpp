@@ -13,6 +13,7 @@ double HybridSim(QCircuit &qc, int memQubits) {
 
     Timer timer;
     double ioTime = 0.0;
+    double ioTimeLow = 0.0;
 
     // 
     // Initialize the state vector
@@ -36,13 +37,13 @@ double HybridSim(QCircuit &qc, int memQubits) {
     //
     Matrix localSv = Matrix(L, 1);
     for (long long blkNo = 0; blkNo < H; ++ blkNo) {
-        ioTime += ReadBlock(localSv, blkNo, H, dir);
+        ioTimeLow += ReadBlock(localSv, blkNo, H, dir);
 
         for (int i = 0; i < qc.numDepths; ++ i) {
             LocalComputing(localSv, L, qc.gates[i], lowQubits, blkNo);
         }
 
-        ioTime += WriteBlock(localSv, blkNo, H, dir);
+        ioTimeLow += WriteBlock(localSv, blkNo, H, dir);
     }
 
     // myThread.join();
@@ -54,6 +55,9 @@ double HybridSim(QCircuit &qc, int memQubits) {
         ioTime += ReadMergeBlock(localSv, mergeNo, H, dir);
         ioTime += MergeComputing(localSv, opMat, mergeNo, H, dir);
     }
+
+    cout << "[INFO] ioTimeHigh: " << ioTime / 1e6 << " ioTimeLow: " << ioTimeLow / 1e6 << " (sec)" << endl;
+    ioTime += ioTimeLow;
 
     return ioTime;
 }

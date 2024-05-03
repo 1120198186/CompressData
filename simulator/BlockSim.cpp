@@ -12,6 +12,7 @@ double BlockSim(QCircuit &qc, int memQubits) {
     long long L = (1 << lowQubits);  // the size of each block
 
     double ioTime = 0.0;
+    double ioTimeLow = 0.0;
 
     // 
     // Initialize the state vector
@@ -34,9 +35,9 @@ double BlockSim(QCircuit &qc, int memQubits) {
 
         // low-order gates
         for (long long blkNo = 0; blkNo < H; ++ blkNo) {
-            ioTime += ReadBlock(localSv0, blkNo, 1, dir);
+            ioTimeLow += ReadBlock(localSv0, blkNo, 1, dir);
             LocalComputing(localSv0, L, qc.gates[i], lowQubits, blkNo);
-            ioTime += WriteBlock(localSv0, blkNo, 1, dir);
+            ioTimeLow += WriteBlock(localSv0, blkNo, 1, dir);
         }
 
         // high-order gates
@@ -141,6 +142,9 @@ double BlockSim(QCircuit &qc, int memQubits) {
             }
         }
     }
+
+    cout << "[INFO] ioTimeHigh: " << ioTime / 1e6 << " ioTimeLow: " << ioTimeLow / 1e6 << " (sec)" << endl;
+    ioTime += ioTimeLow;
 
     return ioTime;
 }
