@@ -33,8 +33,8 @@ def processSvDict(svDict):
     Check if the amplitudes in all state vectors are real numbers,
     only save the real parts (currently), and calculate the compression ratio
     '''
-    #compressors = ['RC', 'sz', 'zfp', 'fpzip']
-    compressors = ['RC']
+    compressors = ['RC', 'sz', 'zfp', 'fpzip']
+    #compressors = ['RC']
 
     cratioDict = {}
     cratioList = []
@@ -47,6 +47,7 @@ def processSvDict(svDict):
         # check if sv is a real state vector
         realParts = np.ascontiguousarray(np.real(sv))
         realParts = np.round(realParts,2)
+        realParts = np.where(realParts == -0.0, 0.0, realParts)
         
         #realParts = np.real(sv)
         #realParts = list(realParts)
@@ -62,10 +63,18 @@ def processSvDict(svDict):
             cratio = compressionRatio(realParts, compressor)
             cratioDict[compressor].append(cratio)
             #cratioList.append(cratio)
+        #if key == '50' :
+        #    cratio = compressionRatio(realParts, compressor)
+            #WriteToExcel(realParts[],"SV50")
+        #    WriteToTxt(realParts,50)
+        #if key == str(len(svDict)-1) :
+        #    cratio = compressionRatio(realParts, compressor)
+            #WriteToExcel(realParts[:1024]+realParts[-1024:],"SVlast")
+        #    WriteToTxt(realParts,len(svDict)-1)
     print(cratioDict)
     
-
-    #plotCratio(cratioDict)
+    for i in compressors:
+        WriteToTxt(cratioDict[i],'ratio'+i+'.txt')
     return cratioDict
 
 def test(sv) :
@@ -79,7 +88,21 @@ def WriteToExcel(dic, fname):
     df.to_excel(f'{currDir}/cratios/{fname}.xlsx', index=True, engine='openpyxl')
     return
 
-def compressionRatio(sv, compressor):
+def WriteToTxt(dic,n):
+    print(n)
+    file = open(n,"w")
+
+        #tot = 0
+    for i,x in enumerate(dic) :
+        file.write(str(x))
+        #tot+=x[1]
+        file.write('\n')
+    file.close()
+
+
+
+
+def compressionRatio(sv, compressor,label = 0):
     #sv =  np.random.rand(10000)
     cratio = 0
     if compressor == 'RC':
@@ -88,6 +111,10 @@ def compressionRatio(sv, compressor):
         cratio = rc.ratio()
         #print(rc.later)
         # print(rc.later)
+        #if(label) :
+            #print(rc.later)
+            #print(cratio)
+            #rc.WriteToTxt(str(label))
     else:
         #print(sv)
         cratio = LibPress(sv, compressor)
@@ -116,6 +143,7 @@ def Execute(qc) :
     #print('The worst cratio: ')
     #pprint(worstCratioDict)
     #print()
+    #WriteToExcel(cratioDict['RC'],'compression_ratio')
     return [bestCratioDict,worstCratioDict]
 
 
@@ -155,7 +183,7 @@ if __name__ == '__main__':
         Execute(qc)
         Display(Execute(qc))
     elif circuitName == 'QFT':
-        qc = QFT(numQubits,2**11)
+        qc = QFT(numQubits,2**14)
         #Execute(qc)
         Display(Execute(qc))
     elif circuitName == 'RandomRegular':

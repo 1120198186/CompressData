@@ -37,6 +37,15 @@ class ComData :
                 this.later[-1][1] += 1
         
         '''
+    def WriteToTxt(this,n) :
+        file = open("statevector"+n+".txt","w")
+        tot = 0
+        for i,x in enumerate(this.later) :
+            file.write(str(i)+" "+str(tot)+" "+str(x))
+            tot+=x[1]
+            file.write('\n')
+        file.close()
+
 
     def ratio(this) :
         #print(len(this.later))
