@@ -10,7 +10,7 @@
  * @param qc        the quantum circuit
  * @param memQubits the number of qubits storable in the memory
  */
-void HybridSVSim(QCircuit &qc, int memQubits);
+void HybridSim(QCircuit &qc, int memQubits, long long calBlocks = 0);
 
 /**
  * @brief Build high-order operation matrix
@@ -30,5 +30,7 @@ void BuildHighOrderOpMat(Matrix &opMat, QCircuit &qc, long long H, int lowQubits
  * @param mergeNo the No. of the merge operation
  * @param H       the size of the opMat
  * @param dir     the directory of the output files
+ * 
+ * @return the I/O time (sec)
  */
-void MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long long H, string dir);
+double MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long long H, string dir);

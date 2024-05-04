@@ -8,4 +8,4 @@
  * @param qc 
  * @param memQubits 
  */
-void BlockSVSim(QCircuit &qc, int memQubits);
+void BlockSim(QCircuit &qc, int memQubits);

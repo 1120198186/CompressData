@@ -17,7 +17,7 @@
 
 4. 基于分块的无压缩模拟（徐）（**已完成**）
 
-   `simulator/BlockSVSim.[h/cpp]`
+   `simulator/BlockSim.[h/cpp]`
 
    - [x] single qubit gates
    - [x] 2-qubit controlled gates
@@ -26,7 +26,7 @@
 
 5. 基于QuanPath分块的无压缩模拟（**已完成**）
 
-   `simulator/HybridSVSim.[h/cpp]`
+   `simulator/HybridSim.[h/cpp]`
 
    - [x] 块的内外存交换
    - [x] 逐个载入块到内存，执行单块内的indexing计算（在`LocalComputing`中已经实现）
@@ -54,7 +54,7 @@ make
 make cleanssd
 .\obj\main.exe <numQubits> <memQubits> <numDepths>
 python main/merge.py
-make cleanssd && make && .\obj\main.exe 10 16 5 && python main\merge.py
+make cleanssd && make && .\obj\main.exe 18 16 5 && python main\merge.py
 ```
 
 其中，`numQubits`用于指定随机生成的线路的量子比特个数；`memQubits`说明内存最多能存下的量子比特数量，存不下的需要分块；`numDepths`说明线路深度（层数）。
