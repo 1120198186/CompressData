@@ -1,6 +1,6 @@
 #include "BlockSim.h"
 
-double BlockSim(QCircuit &qc, int memQubits) {
+void BlockSim(QCircuit &qc, int memQubits) {
     int numQubits = qc.numQubits;
     long long N = (1 << numQubits);
 
@@ -11,14 +11,18 @@ double BlockSim(QCircuit &qc, int memQubits) {
     long long H = (1 << highQubits); // the number of blocks
     long long L = (1 << lowQubits);  // the size of each block
 
-    double ioTime = 0.0;
+    double simTime = 0.0;
+    double ioTimeHigh = 0.0;
     double ioTimeLow = 0.0;
 
     // 
     // Initialize the state vector
     //
     string dir = "./output/block/";
-    ioTime += InitStateVectorSSD(N, H, dir);
+    InitStateVectorSSD(N, H, dir);
+
+    Timer timer;
+    timer.Start();
 
     Matrix localSv0 = Matrix(L, 1);
     Matrix localSv1 = Matrix(L, 1);
@@ -59,8 +63,8 @@ double BlockSim(QCircuit &qc, int memQubits) {
                     if (isAccessed[blkNo]) continue;
 
                     // read two blocks
-                    ioTime += ReadBlock(localSv0, blkNo, 1, dir);
-                    ioTime += ReadBlock(localSv1, blkNo + blkStride, 1, dir);
+                    ioTimeHigh += ReadBlock(localSv0, blkNo, 1, dir);
+                    ioTimeHigh += ReadBlock(localSv1, blkNo + blkStride, 1, dir);
 
                     isAccessed[blkNo] = isAccessed[blkNo + blkStride] = true;
 
@@ -89,8 +93,8 @@ double BlockSim(QCircuit &qc, int memQubits) {
                     }
 
                     // write back
-                    ioTime += WriteBlock(localSv0, blkNo, 1, dir);
-                    ioTime += WriteBlock(localSv1, blkNo + blkStride, 1, dir);
+                    ioTimeHigh += WriteBlock(localSv0, blkNo, 1, dir);
+                    ioTimeHigh += WriteBlock(localSv1, blkNo + blkStride, 1, dir);
                 }
             }
 
@@ -115,10 +119,10 @@ double BlockSim(QCircuit &qc, int memQubits) {
                         if (isAccessed[blkNo]) continue;
 
                         // read four blocks
-                        ioTime += ReadBlock(localSv0, blkNo, 1, dir);
-                        ioTime += ReadBlock(localSv1, blkNo + blkStride, 1, dir);
-                        ioTime += ReadBlock(localSv2, blkNo + blkStride1, 1, dir);
-                        ioTime += ReadBlock(localSv3, blkNo + blkStride + blkStride1, 1, dir);
+                        ioTimeHigh += ReadBlock(localSv0, blkNo, 1, dir);
+                        ioTimeHigh += ReadBlock(localSv1, blkNo + blkStride, 1, dir);
+                        ioTimeHigh += ReadBlock(localSv2, blkNo + blkStride1, 1, dir);
+                        ioTimeHigh += ReadBlock(localSv3, blkNo + blkStride + blkStride1, 1, dir);
 
                         isAccessed[blkNo] = isAccessed[blkNo + blkStride] = isAccessed[blkNo + blkStride1] = isAccessed[blkNo + blkStride + blkStride1] = true;
 
@@ -128,10 +132,10 @@ double BlockSim(QCircuit &qc, int memQubits) {
                         }
 
                         // write back
-                        ioTime += WriteBlock(localSv0, blkNo, 1, dir);
-                        ioTime += WriteBlock(localSv1, blkNo + blkStride, 1, dir);
-                        ioTime += WriteBlock(localSv2, blkNo + blkStride1, 1, dir);
-                        ioTime += WriteBlock(localSv3, blkNo + blkStride + blkStride1, 1, dir);
+                        ioTimeHigh += WriteBlock(localSv0, blkNo, 1, dir);
+                        ioTimeHigh += WriteBlock(localSv1, blkNo + blkStride, 1, dir);
+                        ioTimeHigh += WriteBlock(localSv2, blkNo + blkStride1, 1, dir);
+                        ioTimeHigh += WriteBlock(localSv3, blkNo + blkStride + blkStride1, 1, dir);
                     }
                 }
             }
@@ -142,9 +146,13 @@ double BlockSim(QCircuit &qc, int memQubits) {
             }
         }
     }
+    timer.End();
+    simTime = timer.ElapsedTime();
 
-    cout << "[INFO] ioTimeHigh: " << ioTime / 1e6 << " ioTimeLow: " << ioTimeLow / 1e6 << " (sec)" << endl;
-    ioTime += ioTimeLow;
+    cout << "[INFO] [BlockSim] simTime:\t" << simTime / 1e6;
+    cout << " ioTimeHigh:\t" << ioTimeHigh / 1e6; 
+    cout << " ioTimeLow:\t" << ioTimeLow / 1e6;
+    cout << " compTime:\t" << (simTime - ioTimeHigh - ioTimeLow) / 1e6 << endl;
 
-    return ioTime;
+    return;
 }

@@ -1,6 +1,6 @@
 #include "HybridSim.h"
 
-double HybridSim(QCircuit &qc, int memQubits) {
+void HybridSim(QCircuit &qc, int memQubits, long long calBlocks) {
     int numQubits = qc.numQubits;
     long long N = (1 << numQubits);
 
@@ -11,15 +11,18 @@ double HybridSim(QCircuit &qc, int memQubits) {
     long long L = (1 << lowQubits);  // the size of each block
     long long numFiles = H * H;      // the number of files
 
-    Timer timer;
-    double ioTime = 0.0;
+    double simTime = 0.0;
+    double ioTimeHigh = 0.0;
     double ioTimeLow = 0.0;
 
     // 
     // Initialize the state vector
     //
     string dir = "./output/hybrid/";
-    ioTime += InitStateVectorSSD(N, numFiles, dir);
+    InitStateVectorSSD(N, numFiles, dir);
+    
+    Timer timer;
+    timer.Start();
 
     //
     // An independent thread for calculating high-order operation matrix
@@ -35,8 +38,11 @@ double HybridSim(QCircuit &qc, int memQubits) {
     //
     // Local SVSim for each block
     //
+    if (calBlocks == 0) {
+        calBlocks = H;
+    }
     Matrix localSv = Matrix(L, 1);
-    for (long long blkNo = 0; blkNo < H; ++ blkNo) {
+    for (long long blkNo = 0; blkNo < calBlocks; ++ blkNo) {
         ioTimeLow += ReadBlock(localSv, blkNo, H, dir);
 
         for (int i = 0; i < qc.numDepths; ++ i) {
@@ -52,14 +58,19 @@ double HybridSim(QCircuit &qc, int memQubits) {
     // Merge
     //
     for (long long mergeNo = 0; mergeNo < H; ++ mergeNo) {
-        ioTime += ReadMergeBlock(localSv, mergeNo, H, dir);
-        ioTime += MergeComputing(localSv, opMat, mergeNo, H, dir);
+        ioTimeHigh += ReadMergeBlock(localSv, mergeNo, H, dir);
+        ioTimeHigh += MergeComputing(localSv, opMat, mergeNo, H, dir);
     }
 
-    cout << "[INFO] ioTimeHigh: " << ioTime / 1e6 << " ioTimeLow: " << ioTimeLow / 1e6 << " (sec)" << endl;
-    ioTime += ioTimeLow;
+    timer.End();
+    simTime = timer.ElapsedTime();
 
-    return ioTime;
+    cout << "[INFO] [HybridSim] simTime:\t" << simTime / 1e6;
+    cout << " ioTimeHigh:\t" << ioTimeHigh / 1e6; 
+    cout << " ioTimeLow:\t" << ioTimeLow / 1e6;
+    cout << " compTime:\t" << (simTime - ioTimeHigh - ioTimeLow) / 1e6 << endl;
+
+    return;
 }
 
 
@@ -140,10 +151,6 @@ double MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long lon
     Timer timer;
     double ioTime = 0.0;
 
-    // double compTime = 0.0;
-
-    // timer.Start();
-
     for (long long blkNo = 0; blkNo < H; ++ blkNo) { // [blkNo, mergeNo]
         // calculate the filename
         filename = blkNo * H + mergeNo;
@@ -158,13 +165,10 @@ double MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long lon
 
         // write the file
         for (long long i = 0; i < fileSize; ++ i) {
-            // timer.Start();
             ans = 0.0;
             for (long long j = 0; j < H; ++ j) {
                 ans += opMat.data[blkNo][j] * localV.data[j * fileSize + i][0];
             }
-            // timer.End();
-            // compTime += timer.ElapsedTime();
 
             timer.Start();
             file << ans << endl; // write total fileSize amplitudes to file
@@ -173,10 +177,6 @@ double MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long lon
         }
         file.close();
     }
-
-    // timer.End();
-    // ioTime += timer.ElapsedTime();
-    // cout << "[DEBUG] MergeComputing: " << compTime << " us" << endl;
 
     return ioTime;
 }

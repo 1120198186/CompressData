@@ -9,10 +9,8 @@
  * 
  * @param qc        the quantum circuit
  * @param memQubits the number of qubits storable in the memory
- * 
- * @return the I/O time (sec)
  */
-double HybridSim(QCircuit &qc, int memQubits);
+void HybridSim(QCircuit &qc, int memQubits, long long calBlocks = 0);
 
 /**
  * @brief Build high-order operation matrix

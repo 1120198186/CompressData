@@ -7,7 +7,5 @@
  * 
  * @param qc 
  * @param memQubits 
- * 
- * @return the I/O time (sec)
  */
-double BlockSim(QCircuit &qc, int memQubits);
+void BlockSim(QCircuit &qc, int memQubits);
