@@ -156,12 +156,12 @@ double MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long lon
         filename = blkNo * H + mergeNo;
 
         // open the file
-        timer.Start();
+        // timer.Start();
         filenameStream.str(""); // clear the stream
         filenameStream << dir << "out" << filename;
         file.open(filenameStream.str());
-        timer.End();
-        ioTime += timer.ElapsedTime();
+        // timer.End();
+        // ioTime += timer.ElapsedTime();
 
         // write the file
         for (long long i = 0; i < fileSize; ++ i) {
