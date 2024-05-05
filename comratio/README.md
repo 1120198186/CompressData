@@ -12,7 +12,9 @@ cd ~/compressed_qcsim/tests
 cd ~/CompressData/comratio
 ```
 
-实验结果会复制到`~/CompressData/comratio/ratioQPress.txt`中，该文件记录了每个gate执行完毕后的压缩率，最后两行是统计的最坏压缩率。
+实验结果会复制到`~/CompressData/comratio/ratioQPress.txt`中，
+该文件记录了每个gate执行完毕后的压缩率，最后两行是统计的最坏压缩率。
+如果压缩率中出现了科学计数法，最坏压缩率的统计会出问题。
 目前记录的是`<numQubits=20> <numGates=20>`的压缩情况，如需要可以调整参数。
 
 ### SZ, ZFP, FPZIP
