@@ -13,7 +13,7 @@ double SVSim(QCircuit &qc) {
             LocalComputing(localSv, N, qc.gates[i], qc.numQubits, 0);
         }
         // Write the state vector to the output file
-        // ioTime += WriteBlock(localSv, 0, 1, "./output/svsim/");
+        ioTime += WriteBlock(localSv, 0, 1, "./output/svsim/");
         
         return ioTime;
     } catch (const bad_alloc& e) {

@@ -19,47 +19,63 @@ void HybridSim(QCircuit &qc, int memQubits, long long calBlocks) {
     // Initialize the state vector
     //
     string dir = "./output/hybrid/";
-    InitStateVectorSSD(N, numFiles, dir);
+    if (calBlocks != 1) {
+        InitStateVectorSSD(N, numFiles, dir);
+    }
     
     Timer timer;
     timer.Start();
 
     //
-    // An independent thread for calculating high-order operation matrix
+    // Calculating high-order operation matrix
     // 
     Matrix opMat;
     Matrix_Init_IDE(H, opMat);
     BuildHighOrderOpMat(opMat, qc, H, lowQubits);
-    
-    // cout << endl << endl << "[DEBUG] opMat: " << endl;
-    // opMat.print();
-    // TODO: thread myThread(std::bind(BuildHighOrderOpMat, opMat, qc, H, lowQubits));
 
-    //
-    // Local SVSim for each block
-    //
     if (calBlocks == 0) {
         calBlocks = H;
     }
+
     Matrix localSv = Matrix(L, 1);
-    for (long long blkNo = 0; blkNo < calBlocks; ++ blkNo) {
-        ioTimeLow += ReadBlock(localSv, blkNo, H, dir);
+
+    if (calBlocks == 1) {
+        localSv.data[0][0] = 1.0;
 
         for (int i = 0; i < qc.numDepths; ++ i) {
-            LocalComputing(localSv, L, qc.gates[i], lowQubits, blkNo);
+            LocalComputing(localSv, L, qc.gates[i], lowQubits, 0);
         }
 
-        ioTimeLow += WriteBlock(localSv, blkNo, H, dir);
-    }
+        ioTimeHigh += MergeComputingForOneBlock(localSv, opMat, H, dir);
+    } else {
+        //
+        // IndexSim
+        //
+        for (long long blkNo = 0; blkNo < calBlocks; ++ blkNo) {
+            ioTimeLow += ReadBlock(localSv, blkNo, H, dir);
+            for (int i = 0; i < qc.numDepths; ++ i) {
+                LocalComputing(localSv, L, qc.gates[i], lowQubits, blkNo);
+            }
+            ioTimeLow += WriteBlock(localSv, blkNo, H, dir);
+        }
+        // 
+        // MatrixSim
+        // 
+        double ioTimeHighRead = 0.0;
+        double ioTimeHighWrite = 0.0;
+        // for (long long mergeNo = 0; mergeNo < H; ++ mergeNo) {
+        //     ioTimeHighRead += ReadMergeBlock(localSv, mergeNo, H, dir);
+        //     ioTimeHighWrite += MergeComputing(localSv, opMat, mergeNo, H, dir);
+        // }
+        for (long long mergeNo = 0; mergeNo < calBlocks; ++ mergeNo) {
+            ioTimeHighRead += ReadMergeBlock(localSv, mergeNo, H, dir);
+        }
+        for (long long mergeNo = 0; mergeNo < H; ++ mergeNo) {
+            ioTimeHighWrite += MergeComputing(localSv, opMat, mergeNo, H, dir);
+        }
+        cout << "[DEBUG] ioTimeHighRead: " << ioTimeHighRead / 1e6 << " ioTimeHighWrite: " << ioTimeHighWrite / 1e6 << endl;
 
-    // myThread.join();
-
-    //
-    // Merge
-    //
-    for (long long mergeNo = 0; mergeNo < H; ++ mergeNo) {
-        ioTimeHigh += ReadMergeBlock(localSv, mergeNo, H, dir);
-        ioTimeHigh += MergeComputing(localSv, opMat, mergeNo, H, dir);
+        ioTimeHigh = ioTimeHighRead + ioTimeHighWrite;
     }
 
     timer.End();
@@ -156,12 +172,12 @@ double MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long lon
         filename = blkNo * H + mergeNo;
 
         // open the file
-        // timer.Start();
+        timer.Start();
         filenameStream.str(""); // clear the stream
         filenameStream << dir << "out" << filename;
         file.open(filenameStream.str());
-        // timer.End();
-        // ioTime += timer.ElapsedTime();
+        timer.End();
+        ioTime += timer.ElapsedTime();
 
         // write the file
         for (long long i = 0; i < fileSize; ++ i) {
@@ -169,6 +185,41 @@ double MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long lon
             for (long long j = 0; j < H; ++ j) {
                 ans += opMat.data[blkNo][j] * localV.data[j * fileSize + i][0];
             }
+
+            timer.Start();
+            file << ans << endl; // write total fileSize amplitudes to file
+            timer.End();
+            ioTime += timer.ElapsedTime();
+        }
+        file.close();
+    }
+
+    return ioTime;
+}
+
+
+double MergeComputingForOneBlock(Matrix &localV, Matrix &opMat, long long H, string dir) {
+    stringstream filenameStream;
+    ofstream file;
+
+    long long fileSize = localV.row; // the number of amplitudes within each file
+    double ans;
+
+    Timer timer;
+    double ioTime = 0.0;
+
+    for (long long blkNo = 0; blkNo < H; ++ blkNo) {
+        // open the file
+        timer.Start();
+        filenameStream.str(""); // clear the stream
+        filenameStream << dir << "out" << blkNo;
+        file.open(filenameStream.str());
+        timer.End();
+        ioTime += timer.ElapsedTime();
+
+        // write the file
+        for (long long i = 0; i < fileSize; ++ i) {
+            ans = opMat.data[blkNo][0] * localV.data[i][0];
 
             timer.Start();
             file << ans << endl; // write total fileSize amplitudes to file

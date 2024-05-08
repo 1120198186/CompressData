@@ -31,6 +31,18 @@ void BuildHighOrderOpMat(Matrix &opMat, QCircuit &qc, long long H, int lowQubits
  * @param H       the size of the opMat
  * @param dir     the directory of the output files
  * 
- * @return the I/O time (sec)
+ * @return the I/O time (us)
  */
 double MergeComputing(Matrix &localV, Matrix &opMat, long long mergeNo, long long H, string dir);
+
+/**
+ * @brief Merge for one block (|0>^n)
+ * 
+ * @param localV 
+ * @param opMat 
+ * @param H 
+ * @param dir 
+ * 
+ * @return double the I/O time (us)
+ */
+double MergeComputingForOneBlock(Matrix &localV, Matrix &opMat, long long H, string dir);

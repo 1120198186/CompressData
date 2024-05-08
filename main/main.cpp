@@ -31,14 +31,12 @@ int main(int argc, char** argv) {
     QCircuit qc = RandomRandom(numQubits, numDepths);
     // QCircuit qc = test(numQubits, numDepths, memQubits);
 
-    // Timer timer;
-
-    // double ioTime = 0.0, simTime = 0.0;
-
     //
     // Call different simulators
     //
     // Method 1: Local SVSim
+    // Timer timer;
+    // double ioTime = 0.0, simTime = 0.0;
     // timer.Start();
     // ioTime = SVSim(qc) / 1e6;
     // timer.End();
@@ -46,8 +44,8 @@ int main(int argc, char** argv) {
     // cout << "[INFO] [SVSim] Sim time:\t" << simTime << " (sec);\tComp time: " << simTime - ioTime << " (sec)\n";
 
     // Method 2: BlockSim
-    if (calBlocks == 0)
-        BlockSim(qc, memQubits);
+    // if (calBlocks == 0)
+    //     BlockSim(qc, memQubits);
 
     // Method 3: HybridSim
     HybridSim(qc, memQubits, calBlocks);
