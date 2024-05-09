@@ -19,10 +19,11 @@
 @REM make cleanssd && .\obj\main.exe 20 18 15 && python main\merge.py
 
 @REM InitSv
-make cleanssd && .\obj\main.exe 20 18 5 1 && python main\merge.py
-make cleanssd && .\obj\main.exe 20 18 5 2 && python main\merge.py
-make cleanssd && .\obj\main.exe 20 18 5 3 && python main\merge.py
-make cleanssd && .\obj\main.exe 20 18 5 4 && python main\merge.py
+@REM make cleanssd && .\obj\main.exe 20 18 5 1 && python main\merge.py
+@REM make cleanssd && .\obj\main.exe 20 18 5 2 && python main\merge.py
+@REM make cleanssd && .\obj\main.exe 20 18 5 3 && python main\merge.py
+@REM make cleanssd && .\obj\main.exe 20 18 5 4 && python main\merge.py
+make cleanssd && .\obj\main.exe 22 18 5 && python main\merge.py
 @REM make cleanssd && .\obj\main.exe 22 18 5 1 && python main\merge.py
 @REM make cleanssd && .\obj\main.exe 22 18 5 4 && python main\merge.py
 @REM make cleanssd && .\obj\main.exe 22 18 5 8 && python main\merge.py

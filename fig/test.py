@@ -276,7 +276,7 @@ def plot3add4():
     #plt.tight_layout()
     # plt.subplots_adjust(wspace=0)
 
-    plt.savefig(f'pdfname.pdf', format='pdf', bbox_inches='tight')
+    plt.savefig(f'compressor.pdf', format='pdf', bbox_inches='tight')
     #plt.show()
 
     plt.show()

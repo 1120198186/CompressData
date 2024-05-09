@@ -44,11 +44,11 @@ int main(int argc, char** argv) {
     // cout << "[INFO] [SVSim] Sim time:\t" << simTime << " (sec);\tComp time: " << simTime - ioTime << " (sec)\n";
 
     // Method 2: BlockSim
-    // if (calBlocks == 0)
-    //     BlockSim(qc, memQubits);
+    if (calBlocks == 0)
+        BlockSim(qc, memQubits);
 
     // Method 3: HybridSim
-    HybridSim(qc, memQubits, calBlocks);
+    // HybridSim(qc, memQubits, calBlocks);
 
     // TODO: Method 4: Repeat Counter
 
