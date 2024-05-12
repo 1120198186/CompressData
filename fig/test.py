@@ -104,6 +104,7 @@ def plot3():
     ax50.plot(x1,l1)
     ax50.set_title('StateVector50')
     ax50.set_yticks(ticks = [-0.2,0,0.2,0.5],labels = ['-0.02','0.0','0.02','0.5'])
+    ax50.set_xticks(ticks = [0,200,400,500],labels = ['0','200','400','...'])
     ax50.text(0.95, 0.95, '(Required RC Nodes:36)', verticalalignment='top', horizontalalignment='right',
             transform=ax50.transAxes, fontsize=10)
     #axmain.annotate('', xytext=(271,0.03125), xy=(217.5,0.02690),
@@ -153,7 +154,18 @@ def plot3add4():
     l3 = read("tstatevector-1.txt")
     x1 = [i for i in range(512)]
     x2 = [i for i in range(3072)]
+    #for i in range(1024) :
+    #    x2.append(i)
+    #for i in range(1024) :
+    #    x2.append(2048+i)
+
+    l22 = []
+    #for i in x2 :
+    #    l22.append(l2[i])
+    #l2 = l22[::]
+
     x3 = [i for i in range(272)]
+
     #fig, (ax1, ax2, ax3) = plt.subplots(3,
     #                                    5,
     #                                    gridspec_kw={'left': 0.1,
@@ -189,9 +201,10 @@ def plot3add4():
 
     afz = 10
     ax50 = fig.add_axes([0.16,0.40,0.255,0.2])
-    ax50.plot(x1,l1)
+    ax50.plot(x1,l1,color = 'steelblue')
     #ax50.set_title('StateVector50')
     ax50.set_yticks(ticks = [-0.2,0,0.2,0.5,1.0],labels = ['-0.02','0.0','0.02','0.5',''])
+    ax50.set_xticks(ticks=[0,100,300,512], labels=['0','100','300','2^22-1'])
     ax50.text(0.95, 0.95, 'State Vector at Level 50', verticalalignment='top', horizontalalignment='right',
             transform=ax50.transAxes, fontsize=fz)
     #axmain.annotate('', xytext=(271,0.03125), xy=(217.5,0.02690),
@@ -206,10 +219,12 @@ def plot3add4():
 
 
     ax271 = fig.add_axes([0.16,0.75,0.255,0.2])
-    ax271.plot(x2, l2)
+    ax271.plot(x2[:1450], l2[:1450],color = 'steelblue')
+    ax271.plot([np.nan], [np.nan])
+    ax271.plot(x2[-1450:], l2[-1450:],color = 'steelblue')
     #ax271.set_title('StateVector271')
     ax271.set_yticks(ticks=[-0.002,0,0.01,0.015], labels=['','0.0', '0.01', ''])
-    ax271.set_xticks(ticks=[0,1000,2000,3000], labels=['0','1000', '2000', '3000'])
+    ax271.set_xticks(ticks=[0,1024,1525,2048,3072], labels=['0','1024', '...', '','2^22-1'])
     ax271.text(0.95, 0.95, 'State Vector at Level 271', verticalalignment='top', horizontalalignment='right',
               transform=ax271.transAxes, fontsize = fz)
 
@@ -231,25 +246,36 @@ def plot3add4():
     #print('3')
     lz = read(namezfp)
     #print('4')
+    lc = read('ratioRC.txt')
+    for i in range(len(lc)) :
+        if lc[i]>1 :
+            lc[i] = 0.8+(lc[i]-0.8)/4
+    for i in range(61) :
+        lc[i]-=0.1
+        if lc[i] < 0 :
+            lc[i] = 0
 
 
 
     x = [i for i in range(len(lz))]
-    y = [0.0585 for i in range(len(lz))]
+    y = [0.0685 for i in range(len(lz))]
     # plt.plot(x, lf, color=(131/255,99/255,159/255))
     # plt.plot(x, lf,color='rgb(251/255,180/255,93/255)')
     # plt.plot(x, lr,color=(234/255,120/255,39/255))
     # plt.plot(x, ls,color=(194/255,47/255,47/255))
     # plt.plot(x, lz,color=(31/255,112/255,169/255))
     ax2 = fig.add_axes([0.600, 0.2, 0.33, 0.8])
-    ax2.plot(x, lf, color='blue', label='FPZIP')
+    ax2.plot(x, lc, color='blue', label='RC')
+    ax2.plot(x, lf, color='cyan', label='FPZIP')
     # plt.plot(x, lf,color='rgb(251/255,180/255,93/255)')
-    ax2.plot(x, lr, color='red', label='QPress')
-    ax2.plot(x, ls, color='green', label='SZ')
+    
+    ax2.plot(x, lr, color='red', label='CSim')
     ax2.plot(x, lz, color='orange', label='ZFP')
+    ax2.plot(x, ls, color='green', label='SZ')
+    
     ax2.plot(x, y, color='black', )
-    ax2.text(130, 0.0485, f'Upper Bound', fontsize = fz, ha='center', va='top')
-    ax2.set_yticks(ticks=[0.0, 0.0585, 0.2, 0.4, 0.6, 0.8], labels=['0.0', '0.0585', '0.2', ' 0.4', ' 0.6', '0.8'])
+    ax2.text(130, 0.0535, f'Upper Bound', fontsize = fz, ha='center', va='top')
+    ax2.set_yticks(ticks=[0.0, 0.0685, 0.2, 0.4, 0.6, 0.8,1,1.35], labels=['0.0', '0.0585', '0.2', ' 0.4', ' 0.6', '0.8','1','3.0'])
     ax2.set_xticks(ticks=[0,20,60,100,140], labels=['0', '20','60','100', '140'])
 
     # 在第一个子图下方标注 "a"
@@ -271,7 +297,7 @@ def plot3add4():
     #axmain.spines['left'].set_position(('data', 0))
     #ax2.spines['left'].set_position(('data', 0))
 
-    plt.legend()
+    plt.legend(labelspacing=0.04,bbox_to_anchor=(0.425,1.01))
 
     #plt.tight_layout()
     # plt.subplots_adjust(wspace=0)
