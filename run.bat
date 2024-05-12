@@ -1,6 +1,6 @@
 @REM Motivation
-@REM make cleanssd && .\obj\main.exe 16 14 1 && python main\merge.py
-@REM make cleanssd && .\obj\main.exe 16 14 5 && python main\merge.py
+make cleanssd && .\obj\main.exe 16 14 1 && python main\merge.py
+make cleanssd && .\obj\main.exe 16 14 5 && python main\merge.py
 
 @REM #MemQubits
 @REM make cleanssd && .\obj\main.exe 20 19 1 && python main\merge.py
@@ -23,7 +23,7 @@
 @REM make cleanssd && .\obj\main.exe 20 18 5 2 && python main\merge.py
 @REM make cleanssd && .\obj\main.exe 20 18 5 3 && python main\merge.py
 @REM make cleanssd && .\obj\main.exe 20 18 5 4 && python main\merge.py
-make cleanssd && .\obj\main.exe 22 18 5 && python main\merge.py
+@REM make cleanssd && .\obj\main.exe 22 18 5 && python main\merge.py
 @REM make cleanssd && .\obj\main.exe 22 18 5 1 && python main\merge.py
 @REM make cleanssd && .\obj\main.exe 22 18 5 4 && python main\merge.py
 @REM make cleanssd && .\obj\main.exe 22 18 5 8 && python main\merge.py

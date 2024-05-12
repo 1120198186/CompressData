@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
         BlockSim(qc, memQubits);
 
     // Method 3: HybridSim
-    // HybridSim(qc, memQubits, calBlocks);
+    HybridSim(qc, memQubits, calBlocks);
 
     // TODO: Method 4: Repeat Counter
 

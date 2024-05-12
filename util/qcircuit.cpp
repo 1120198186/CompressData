@@ -91,30 +91,30 @@ QCircuit RandomRandom(int numQubits, int numDepths) {
 
     while (true) {
         // add one level of CX gates
-        if (qc.numDepths % 10 == 2) {
-            for (int j = numQubits - 1; j > 0; j -= 2) {
-                qc.cx(j, j-1);
-                ++ numGates;
-            }
+        // if (qc.numDepths % 10 == 2) {
+        //     for (int j = numQubits - 1; j > 0; j -= 2) {
+        //         qc.cx(j, j-1);
+        //         ++ numGates;
+        //     }
             // for (int j = numQubits - 2; j > 0; j -= 2) {
             //     qc.cx(j, j-1);
             // }
-        }
+        // }
         // add one level of single-qubit gates
-        else {
+        // else {
             // random single-qubit gates
             for (int j = 0; j < numQubits; ++ j) {
                 qc.ry((double)rand() / RAND_MAX * 2 * acos(-1.0), j);
                 ++ numGates;
             }
-        }
+        // }
 
         if (qc.numDepths >= numDepths) {
             break;
         }
     }
 
-    // qc.print();
+    qc.print();
 
     cout << "[INFO] [RandomRandom] #Qubits: [" << qc.numQubits << "] #Gates: [" << numGates << "]" << endl;
     return qc;

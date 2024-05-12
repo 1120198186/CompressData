@@ -63,17 +63,17 @@ void HybridSim(QCircuit &qc, int memQubits, long long calBlocks) {
         // 
         double ioTimeHighRead = 0.0;
         double ioTimeHighWrite = 0.0;
-        // for (long long mergeNo = 0; mergeNo < H; ++ mergeNo) {
-        //     ioTimeHighRead += ReadMergeBlock(localSv, mergeNo, H, dir);
-        //     ioTimeHighWrite += MergeComputing(localSv, opMat, mergeNo, H, dir);
-        // }
-        for (long long mergeNo = 0; mergeNo < calBlocks; ++ mergeNo) {
-            ioTimeHighRead += ReadMergeBlock(localSv, mergeNo, H, dir);
-        }
         for (long long mergeNo = 0; mergeNo < H; ++ mergeNo) {
+            ioTimeHighRead += ReadMergeBlock(localSv, mergeNo, H, dir);
             ioTimeHighWrite += MergeComputing(localSv, opMat, mergeNo, H, dir);
         }
-        cout << "[DEBUG] ioTimeHighRead: " << ioTimeHighRead / 1e6 << " ioTimeHighWrite: " << ioTimeHighWrite / 1e6 << endl;
+        // for (long long mergeNo = 0; mergeNo < calBlocks; ++ mergeNo) {
+        //     ioTimeHighRead += ReadMergeBlock(localSv, mergeNo, H, dir);
+        // }
+        // for (long long mergeNo = 0; mergeNo < H; ++ mergeNo) {
+        //     ioTimeHighWrite += MergeComputing(localSv, opMat, mergeNo, H, dir);
+        // }
+        // cout << "[DEBUG] ioTimeHighRead: " << ioTimeHighRead / 1e6 << " ioTimeHighWrite: " << ioTimeHighWrite / 1e6 << endl;
 
         ioTimeHigh = ioTimeHighRead + ioTimeHighWrite;
     }
